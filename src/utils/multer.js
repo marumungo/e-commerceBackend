@@ -1,4 +1,4 @@
-const multer = require('multer')
+const multer = require('multer');
 const { dirname } = require("path");
 
 const storage = multer.diskStorage({
@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
         console.log('file: ', file)
         cb(null, `${Date.now()}-${file.originalname}`)
     } 
-})
+});
 
 const uploader = multer({
     storage,
@@ -17,9 +17,9 @@ const uploader = multer({
         console.log(err)
         next()
     }
-})
+});
 
 
 module.exports = {
     uploader
-}
+};

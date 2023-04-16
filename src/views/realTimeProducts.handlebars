@@ -1,0 +1,46 @@
+<div>
+    <h2>Products (realtime)</h2>
+    <hr>
+    <form id="formProduct">
+        <input type="text" name="title" id="title">
+        <input type="submit" value="Enviar">
+    </form>
+    <div>
+        <div id="listProducts"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    let form = document.getElementById("formProduct");
+
+    form.addEventListener("submit", evt => {
+        evt.preventDefault();
+        let title = form.elements.title.value;
+        console.log(title);
+
+        if(title !== "") {
+            socket.emit("addProduct", {
+                title
+            });
+        };
+
+        form.reset();
+    });
+
+    socket.on("products", data => {
+        console.log(data);
+
+        let div = document.getElementById("listProducts");
+        let products = "";
+
+        data.forEach((product) => {
+            products += `<div>${product.title} precio: ${product.price}</div>`
+        });
+
+        div.innerHTML = products;
+    });
+</script>

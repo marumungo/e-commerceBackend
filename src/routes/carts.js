@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { Router } = require("express");
 
-const path = "./routes/carts.json";
+const path = "./manager/carts.json";
 
 // Declaro y llamo al Router
 const router = Router();
@@ -30,7 +30,7 @@ router.post("/", (req, res) => {
     // Agregar el producto al array y al JSON
     carts.push(cart);
     res.status(200).send({cart});
-    fs.writeFileSync(path, JSON.stringify(carts, null, 2), 'utf-8');
+    // fs.writeFileSync(path, JSON.stringify(carts, null, 2), 'utf-8');
 });
 
 // GET que muestra un carrito según su id
@@ -72,7 +72,7 @@ router.post("/:cid/product/:pid", (req, res) => {
         res.status(200).send({status: "success", message: "Se ha sumado otro producto igual!", payload: cartById});
     }
 
-    fs.writeFileSync(path, JSON.stringify(carts, null, 2), 'utf-8');
+    // fs.writeFileSync(path, JSON.stringify(carts, null, 2), 'utf-8');
 });
 
 module.exports = router;
