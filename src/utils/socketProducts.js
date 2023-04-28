@@ -1,4 +1,4 @@
-const { ProductManagerFile } = require("../manager/productManagerFile");
+const { ProductManagerFile } = require("../manager/file/productManagerFile");
 
 const productManager = new ProductManagerFile();
 

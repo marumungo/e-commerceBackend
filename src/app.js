@@ -1,13 +1,11 @@
 const express = require("express");
 const handlebars = require("express-handlebars");
+const routerServer = require("./routes/index");
 const { Server } = require("socket.io");
 const { socketChat } = require("./utils/socketChat");
 const { socketProducts } = require("./utils/socketProducts");
-
-// Declaro a los Routers
-const cartsRouter = require("./routes/carts");
-const productsRouter = require("./routes/products");
-const viewsRouter = require("./routes/views");
+const objectConfig = require("./config/objectConfig");
+const logger = require("morgan");
 
 // Llamo a express
 const app = express();
@@ -17,9 +15,12 @@ const PORT = 8080;
 
 const httpServer = app.listen(PORT, () => {
     console.log(`Escuchando en el puerto: ${PORT}`);
-})
+});
 
 const io = new Server(httpServer);
+
+// Ejecuto la configuracion de la base de datos
+objectConfig.connectDB();
 
 // Configuro handlebars
 app.engine("handlebars", handlebars.engine());
@@ -29,6 +30,8 @@ app.set("view engine", "handlebars");
 // Lectura de código compatible
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use("/static", express.static(__dirname + "/public"));
+app.use(logger("dev"));
 
 // Declaro el endpoint que utilizará socket.io y llamo a la funcion
 app.get('/chat', (req, res)=>{
@@ -39,8 +42,5 @@ app.get('/chat', (req, res)=>{
 socketChat(io);
 socketProducts(io);
 
-// Llamo a los Routers y coloco los endpoint de inicio
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartsRouter);
-app.use("/", viewsRouter);
-app.use("/static", express.static(__dirname + "/public"));
+// Llamo al archivo que contiene los Routers
+app.use(routerServer);

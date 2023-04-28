@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-const path = "./src/manager/products.json";
+const path = "./src/manager/file/products.json";
 
 // Declaro los productos en forma de objetos, dentro de un array
 let products = [

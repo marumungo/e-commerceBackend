@@ -3,10 +3,6 @@ const { uploader } = require("../utils/multer");
 
 const router = Router();
 
-router.get("/", (req, res) => {
-
-});
-
 // Declaro el endpoint que utilizará multer
 router.post('/single', uploader.single('myfile'), (req, res)=>{
     res.status(200).send({

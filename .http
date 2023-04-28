@@ -1,0 +1,55 @@
+// CARTS
+CREA UN CARRITO CON LOS PRODUCTOS PASADOS POR PROMPT
+### POST
+POST localhost:8080/api/carts
+Content-Type: application/json
+
+{
+    "product": 1
+}
+
+DEVUELVE UN CARRITO SEGUN SU ID
+### GET
+GET localhost:8080/api/carts/id
+
+AGREGA EL PRODUCTO TRES A UN CARRITO SEGUN SU ID
+### POST
+POST localhost:8080/api/carts/id/product/3
+
+// PRODUCTS
+DEVUELVE TODOS LOS PRODUCTOS
+### GET
+GET localhost:8080/api/products
+
+DEVUELVE UN PRODUCTO SEGUN SU ID
+### GET
+GET localhost:8080/api/products/id
+
+CREA UN PRODUCTO
+### POST
+POST localhost:8080/api/products
+Content-Type: application/json
+
+{
+    "title": "Zapatos",
+    "description": "Con taco alto",
+    "price": 3500,
+    "category": "Calzados",
+    "thumbnail": "imagen1.com",
+    "code": 253,
+    "stock": 45,
+    "id": 1
+  }
+
+ACTUALIZA UN PRODUCTO SEGUN SU ID
+### PUT
+PUT localhost:8080/api/products/id
+Content-Type: application/json
+
+{
+    "title": "Pantalon"
+}
+
+ELIMINA UN PRODUCTO SEGUN SU ID
+### DELETE
+DELETE localhost:8080/api/products/id
