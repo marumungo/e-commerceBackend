@@ -39,11 +39,15 @@ class ProductManagerFile {
     };    
 
     async getProductById(id) {
-        // Busco el producto con esa id
-        const parseId = parseInt(id);
-        const product = products.find(product => product.id === parseId);
-        return product ? product : null;
-    }
+        try {
+            const products = await this.readFile();
+            const parseId = parseInt(id);
+            const product = products.find(product => product.id === parseId);
+            return product ? product : null;
+        } catch (error) {
+            return null;
+        }
+    };   
 
     async addProduct(product) {
         const productIndex = products.findIndex(p => p.code === product.code);
