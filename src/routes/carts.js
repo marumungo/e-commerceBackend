@@ -36,15 +36,12 @@ router.get("/:cid", async (req, res) => {
         //     return res.status(400).send({error: "No existe un carrito con esa ID"});
         // }
 
-        let result = await cartModel.findOne({_id: cid})
+        let result = await cartModel.findOne({_id: cid});
         if (!result) {
             return res.status(404).send({status: "error", message: "No se encuentra el carrito"});
-        }
+        };
 
-        res.send({
-            status: "success",
-            payload: result
-        });
+        res.render('individualCart', { carts: result.products });
         // res.send({cartById});
     } catch (error) {
         console.log(error);

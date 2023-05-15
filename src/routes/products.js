@@ -43,7 +43,7 @@ router.get("/", async (req, res) => {
             prevPage,
             nextPage, 
             totalPages
-        })
+        });
     } catch (error) {
         console.log(error)
     }
@@ -59,7 +59,7 @@ router.get("/:id", async (req, res) => {
         if (!getProductById) {
             return res.status(400).send({error: "No existe un producto con esa ID"});
         } else {
-            return res.send({getProductById});
+            return res.render("individualProduct", { product: getProductById});
         }
     } catch (error) {
         res.status(400).send({error: error.message});
