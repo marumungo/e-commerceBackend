@@ -5,7 +5,9 @@
             <strong>Descripcion:  </strong>{{this.description}} - 
             <strong>Precio: </strong>{{this.price}} -
             <strong>Categoría: </strong>{{this.category}}
+            <a href="/api/products/{{this._id}}"><button>Ir al producto</button></a>
             <a href="/api/carts/64605dd1f56304787a43322c/product/{{this._id}}"><button>Agregar al carrito</button></a>
+            
         </li>
     {{/each}}
 
