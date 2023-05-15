@@ -23,8 +23,16 @@ const io = new Server(httpServer);
 objectConfig.connectDB();
 
 // Configuro handlebars
-app.engine("handlebars", handlebars.engine());
-app.set("views", __dirname + "/views");
+const path = require('path');
+const hbs = handlebars.create({ defaultLayout: "main" });
+
+// Helper 'getProperty' para acceder a las propiedades de un objeto
+hbs.handlebars.registerHelper('getProperty', (object, propertyName) => {
+    return object[propertyName];
+});
+
+app.engine("handlebars", hbs.engine);
+app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "handlebars");
 
 // Lectura de código compatible
