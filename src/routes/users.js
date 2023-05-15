@@ -4,20 +4,26 @@ const { userModel } = require("../manager/mongo/models/user.model");
 // Declaro y llamo al Router
 const router = Router();
 
-// GET que trae los usuarios a partir del userModel
-router.get("/", async (req, res) => {
+// GET que trae los usuarios a partir del userModel y el paginate
+router.get('/',  async (req, res)=>{
     try {
-        let users = await userModel.find();
-        console.log(users);
+        const {page=1} = req.query
+        let users = await userModel.paginate({}, {limit: 10, page: page, lean: true})
+        const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = users
 
-        res.send ({
-            status: "success",
-            payload: users
-        });
+        res.render('users',{
+            status: 'success',
+            users: docs,
+            hasPrevPage,
+            hasNextPage,
+            prevPage,
+            nextPage
+        })
     } catch (error) {
-        console.log(error);
+        console.log(error)
     }
-});
+})
+
 
 // POST que agrega un usuario a la base de datos a partir del userModel
 router.post("/", async (req, res) => {

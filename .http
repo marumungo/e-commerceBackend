@@ -1,25 +1,73 @@
 // CARTS
+DEVUELVE TODOS LOS CARRITOS
+### GET
+GET localhost:8080/api/carts
+
 CREA UN CARRITO CON LOS PRODUCTOS PASADOS POR PROMPT
 ### POST
 POST localhost:8080/api/carts
-Content-Type: application/json
-
-{
-    "product": 1
-}
 
 DEVUELVE UN CARRITO SEGUN SU ID
 ### GET
 GET localhost:8080/api/carts/id
 
-AGREGA EL PRODUCTO TRES A UN CARRITO SEGUN SU ID
+AGREGA UN PRODUCTO SEGUN SU ID A UN CARRITO SEGUN SU ID
 ### POST
-POST localhost:8080/api/carts/id/product/3
+POST localhost:8080/api/carts/id/product/id
+
+ACTUALIZA LOS PRODUCTOS DE UN CARRITO
+### PUT
+PUT localhost:8080/api/carts/id
+Content-Type: application/json
+
+{
+  "products": [
+    {
+      "product": "64601897ced89f02b8035fd9",
+      "quantity": 8
+    }
+  ]
+}
+
+ACTUALIZA LA CANTIDAD DE UN PRODUCTO SEGUN SU ID EN UN CARRITO SEGUN SU ID
+### PUT
+PUT PUT localhost:8080/api/carts/id/product/id
+Content-Type: application/json
+
+{"quantity": 7}
+
+ELIMINA LOS PRODUCTOS DE UN CARRITO
+### DELETE
+DELETE localhost:8080/api/carts/id
+
+ELIMINA EL PRODUCTO DE UN CARRITO SEGUN SU ID
+### DELETE
+DELETE localhost:8080/api/carts/id/product/id
 
 // PRODUCTS
 DEVUELVE TODOS LOS PRODUCTOS
 ### GET
 GET localhost:8080/api/products
+
+DEVUELVE LOS PRODUCTOS DE LA PAGINA 2
+### GET
+GET localhost:8080/api/products?page=2
+
+DEVUELVE SOLO TRES PRODUCTOS
+### GET
+GET localhost:8080/api/products?limit=3
+
+DEVUELVE LOS PRODUCTOS ORDENADOS POR PRECIO ASCENDENTE
+### GET
+GET localhost:8080/api/products?sort=asc
+
+DEVUELVE LOS PRODUCTOS ORDENADOS POR PRECIO DESCENDENTE
+### GET
+GET localhost:8080/api/products?sort=desc
+
+DEVUELVE LOS PRODUCTOS DE CATEGORIA CALZADO
+### GET
+GET localhost:8080/api/products?query=calzado
 
 DEVUELVE UN PRODUCTO SEGUN SU ID
 ### GET
@@ -30,16 +78,136 @@ CREA UN PRODUCTO
 POST localhost:8080/api/products
 Content-Type: application/json
 
-{
+[{
     "title": "Zapatos",
     "description": "Con taco alto",
+    "category": "calzado",
     "price": 3500,
-    "category": "Calzados",
     "thumbnail": "imagen1.com",
     "code": 253,
     "stock": 45,
     "id": 1
-  }
+},
+{
+    "title": "Pollera",
+    "description": "Con volados",
+    "category": "abajo",
+    "price": 2600,
+    "thumbnail": "imagen2.com",
+    "code": 178,
+    "stock": 28,
+    "id": 2
+},
+{
+    "title": "Jean",
+    "description": "De color azul",
+    "category": "abajo",
+    "price": 2410,
+    "thumbnail": "imagen3.com",
+    "code": 345,
+    "stock": 12,
+    "id": 3
+},
+{
+    "title": "Remera",
+    "description": "Escote en v",
+    "category": "arriba",
+    "price": 1700,
+    "thumbnail": "imagen4.com",
+    "code": 56,
+    "stock": 39,
+    "id": 4
+},
+{
+    "title": "Blusa",
+    "description": "Con cuello alto",
+    "category": "arriba",
+    "price": 3100,
+    "thumbnail": "imagen5.com",
+    "code": 124,
+    "stock": 24,
+    "id": 5
+},
+{
+    "title": "Pantalón cargo",
+    "description": "Tiro alto",
+    "category": "abajo",
+    "price": 4280,
+    "thumbnail": "imagen6.com",
+    "code": 176,
+    "stock": 53,
+    "id": 6
+},
+{
+    "title": "Saco",
+    "description": "Abrigado de color beige",
+    "category": "abrigo",
+    "price": 7240,
+    "thumbnail": "imagen7.com",
+    "code": 67,
+    "stock": 26,
+    "id": 7
+},
+{
+    "title": "Sandalias",
+    "description": "Abiertas con cierre",
+    "category": "calzado",
+    "price": 3520,
+    "thumbnail": "imagen8.com",
+    "code": 89,
+    "stock": 62,
+    "id": 8
+},
+{
+    "title": "Corset",
+    "description": "Sin tirantes",
+    "category": "arriba",
+    "price": 5470,
+    "thumbnail": "imagen9.com",
+    "code": 53,
+    "stock": 19,
+    "id": 9
+},
+{
+    "title": "Top",
+    "description": "Escote corazón",
+    "category": "arriba",
+    "price": 1390,
+    "thumbnail": "imagen10.com",
+    "code": 25,
+    "stock": 36,
+    "id": 10
+},
+{
+    "title": "Polera",
+    "description": "De algodón",
+    "category": "arriba",
+    "price": 1630,
+    "thumbnail": "imagen11.com",
+    "code": 20,
+    "stock": 26,
+    "id": 11
+},
+{
+    "title": "Short de jean",
+    "description": "Color negro",
+    "category": "abajo",
+    "price": 3840,
+    "thumbnail": "imagen12.com",
+    "code": 75,
+    "stock": 6,
+    "id": 12
+},
+{
+    "title": "Camisa",
+    "description": "Blanca, formal",
+    "category": "arriba",
+    "price": 2347,
+    "thumbnail": "imagen13.com",
+    "code": 125,
+    "stock": 87,
+    "id": 13
+}]
 
 ACTUALIZA UN PRODUCTO SEGUN SU ID
 ### PUT
@@ -53,3 +221,7 @@ Content-Type: application/json
 ELIMINA UN PRODUCTO SEGUN SU ID
 ### DELETE
 DELETE localhost:8080/api/products/id
+
+
+
+

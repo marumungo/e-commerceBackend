@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { Router } = require("express");
 const productManagerMongo = require("../manager/mongo/product.mongo");
+const { productModel } = require("../manager/mongo/models/product.model");
 
 const productManager = new productManagerMongo();
 
@@ -13,12 +14,39 @@ const router = Router();
 
 // GET en el que se verán todos los productos
 router.get("/", async (req, res) => {
+    // Declaro un limite de 10 y pagina 1 por defecto (en caso de que no se reciba por query). Permito que se reciba por query un filtro y un orden por precio
     try {
-        const products = await productManager.getProducts();
-        res.send({status: "success", payload: products});
+        const {page = 1, limit = 10, query, sort} = req.query
+
+        // Declaro queryOptions y filtro los productos segun categoria
+        let queryOptions = {}; 
+        if (query) {
+            queryOptions = { category: query.toLowerCase() };
+        }
+
+        // Declaro sortOptions y valido que asc y desc correspondan a un orden especifico
+        let sortOptions = {};
+        if (sort === "asc") {
+            sortOptions = { price: 1 };
+        } else if (sort === "desc") {
+            sortOptions = { price: -1};
+        }
+        
+        let products = await productModel.paginate(queryOptions, {limit: limit, page: page, sort: sortOptions, lean: true});
+        const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = products;
+        
+        res.render('products',{
+            status: 'success',
+            products: docs,
+            hasPrevPage,
+            hasNextPage,
+            prevPage,
+            nextPage, 
+            totalPages
+        })
     } catch (error) {
-        res.status(400).send({error: error.message});
-    }; 
+        console.log(error)
+    }
 });
 
 // GET que devuelve un producto a partir de su id

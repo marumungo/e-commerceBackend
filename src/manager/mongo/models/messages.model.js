@@ -1,8 +1,9 @@
 const {Schema, model} = require("mongoose");
 
+// Creo la colección en la que se almacenarán los documentos
 const collection = "messages";
 
-// Configuro el esquema del usuario
+// Configuro el esquema del mensaje
 const messageSchema = new Schema({
     user: {
         type: String,

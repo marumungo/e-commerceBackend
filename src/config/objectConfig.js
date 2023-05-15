@@ -1,7 +1,8 @@
 const { connect } = require ("mongoose");
+require('dotenv').config();
 
 // Configuro la base de datos para que se conecte con la nube
-let url = "mongodb+srv://marumungo:mariana123@cluster0.khppywt.mongodb.net/test";
+let url = process.env.MONGO_URL;
 
 module.exports = {
     connectDB: () => {

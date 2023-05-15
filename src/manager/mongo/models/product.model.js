@@ -1,8 +1,10 @@
 const {Schema, model} = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
+// Creo la colección en la que se almacenarán los documentos
 const collection = "products";
 
-// Configuro el esquema del usuario
+// Configuro el esquema del producto
 const productSchema = new Schema({
     title: {
         type: String,
@@ -34,6 +36,8 @@ const productSchema = new Schema({
         unique: true
     }
 });
+
+productSchema.plugin(mongoosePaginate);
 
 // Creo el modelo a traves del esquema
 const productModel = model(collection, productSchema);
