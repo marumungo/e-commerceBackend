@@ -6,6 +6,7 @@ const collection = "users";
 
 // Configuro el esquema del usuario
 const userSchema = new Schema({
+    username: String,
     first_name: String,
     last_name: String,
     email: {
@@ -14,6 +15,7 @@ const userSchema = new Schema({
         unique: true,
         index: true
     },
+    password: String,
     gender: String
 });
 

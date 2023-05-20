@@ -26,4 +26,12 @@ router.get('/realtimeproducts', (req, res) => {
     res.render("realTimeProducts", {});
 });
 
+router.get("/api/sessions/login", (req, res) => {
+    res.render("login", {});
+});
+
+router.get("/api/sessions/register", (req, res) => {
+    res.render("register", {});
+});
+
 module.exports = router;
