@@ -1,12 +1,11 @@
 const { Router } = require("express");
 const { userModel } = require("../manager/mongo/models/user.model");
-const {auth} = require("../middlewares/authentication");
 
 // Declaro y llamo al Router
 const router = Router();
 
 // GET que trae los usuarios a partir del userModel y el paginate
-router.get('/',  auth, async (req, res)=>{
+router.get('/', async (req, res)=>{
     try {
         const {page=1} = req.query
         let users = await userModel.paginate({}, {limit: 10, page: page, lean: true})

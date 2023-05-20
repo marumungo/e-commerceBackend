@@ -2,6 +2,7 @@ const fs = require('fs');
 const { Router } = require("express");
 const productManagerMongo = require("../manager/mongo/product.mongo");
 const { productModel } = require("../manager/mongo/models/product.model");
+const { auth } = require("../middlewares/authentication");
 
 const productManager = new productManagerMongo();
 
@@ -13,7 +14,7 @@ const productManager = new productManagerMongo();
 const router = Router();
 
 // GET en el que se verán todos los productos
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
     // Declaro un limite de 10 y pagina 1 por defecto (en caso de que no se reciba por query). Permito que se reciba por query un filtro y un orden por precio
     try {
         const {page = 1, limit = 10, query, sort} = req.query
@@ -35,8 +36,9 @@ router.get("/", async (req, res) => {
         let products = await productModel.paginate(queryOptions, {limit: limit, page: page, sort: sortOptions, lean: true});
         const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = products;
         
-        res.render('products',{
+        res.render('products', {
             status: 'success',
+            user: req.session.user,
             products: docs,
             hasPrevPage,
             hasNextPage,
@@ -102,5 +104,3 @@ router.delete("/:id", async (req, res) => {
 });
 
 module.exports = router;
-
-

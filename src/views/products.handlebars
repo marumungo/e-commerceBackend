@@ -1,3 +1,13 @@
+<h1>Productos</h1>
+<div>
+    {{#if user}}
+        <p><strong>BIENVENIDO</strong> {{user.first_name}} {{user.last_name}}</p>
+        <p>Email: {{user.email}}</p>
+        <p>Rol: {{user.role}}</p>
+        <a href="/api/sessions/logout">Cerrar sesión</a>
+    {{/if}}
+</div>
+<br>
 <div>
     {{#each products}}
         <li>
@@ -6,8 +16,6 @@
             <strong>Precio: </strong>{{this.price}} -
             <strong>Categoría: </strong>{{this.category}}
             <a href="/api/products/{{this._id}}"><button>Ir al producto</button></a>
-            <a href="/api/carts/64605dd1f56304787a43322c/product/{{this._id}}"><button>Agregar al carrito</button></a>
-            
         </li>
     {{/each}}
 

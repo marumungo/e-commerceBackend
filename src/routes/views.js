@@ -3,6 +3,7 @@ const { uploader } = require("../utils/multer");
 
 const router = Router();
 
+
 // Declaro el endpoint que utilizará multer
 router.post('/single', uploader.single('myfile'), (req, res)=>{
     res.status(200).send({
@@ -24,6 +25,11 @@ router.get("/vista", (req, res) => {
 // Endpoints en tiempo real
 router.get('/realtimeproducts', (req, res) => {
     res.render("realTimeProducts", {});
+});
+
+// Declaro el endpoint que renderizará la página de inicio
+router.get("/", (req, res) => {
+    res.render("login", {});
 });
 
 router.get("/api/sessions/login", (req, res) => {
