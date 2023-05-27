@@ -3,6 +3,7 @@ const { Router } = require("express");
 const productManagerMongo = require("../manager/mongo/product.mongo");
 const { productModel } = require("../manager/mongo/models/product.model");
 const { auth } = require("../middlewares/authentication");
+const { authToken } = require('../utils/jwt');
 
 const productManager = new productManagerMongo();
 

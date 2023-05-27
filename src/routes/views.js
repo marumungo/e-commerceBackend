@@ -40,4 +40,8 @@ router.get("/api/sessions/register", (req, res) => {
     res.render("register", {});
 });
 
+router.get("/api/sessions/forgotPassword", (req, res) => {
+    res.render("forgotPassword", {});
+});
+
 module.exports = router;

@@ -79,6 +79,15 @@ app.use(session({
     saveUninitialized: true
 }));
 
+// Configuro passport
+const { initPassport, initPassportGithub } = require("./config/passportConfig");
+const passport = require("passport");
+
+initPassport();
+initPassportGithub();
+passport.use(passport.initialize());
+passport.use(passport, session);
+
 app.use(cookieParser("palabra secreta"));
 
 // Declaro el endpoint que utilizará socket.io y llamo a la funcion
