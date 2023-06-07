@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
-const JWT_PRIVATE_KEY = 'palabraJwtSecreto';
+require('dotenv').config();
+let privateKey = process.env.JWT_PRIVATE_KEY;
 
 // Usuario sin datos sensibles
 const generateToken = (user) => {
-    const token = jwt.sign({user}, JWT_PRIVATE_KEY, {expiresIn: '1d'});
+    const token = jwt.sign({user}, privateKey, {expiresIn: '1d'});
     return token;
 } 
 
@@ -16,7 +17,7 @@ const authToken = (req, res, next) => {
 
     const token = authHeader.split(' ')[1];
 
-    jwt.verify(token, JWT_PRIVATE_KEY, (error, credential)=>{
+    jwt.verify(token, privateKey, (error, credential)=>{
         if(error) {
             return res.status(403).send({status: 'error', error: 'No autorizado'});
         }

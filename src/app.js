@@ -64,29 +64,30 @@ const { create } = require("connect-mongo");
 require('dotenv').config();
 let url = process.env.MONGO_URL;
 
-app.use(session({
-    store: create ({
-        mongoUrl: url,
-        mongoOptions: {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        },
-        ttl: 10000 * 60
-    }),
+// app.use(session({
+//     store: create ({
+//         mongoUrl: url,
+//         mongoOptions: {
+//             useNewUrlParser: true,
+//             useUnifiedTopology: true
+//         },
+//         ttl: 10000 * 60
+//     }),
     
-    secret: "palabraSecreta",
-    resave: true,
-    saveUninitialized: true
-}));
+//     secret: "palabraSecreta",
+//     resave: true,
+//     saveUninitialized: true
+// }));
 
 // Configuro passport
-const { initPassport, initPassportGithub } = require("./config/passportConfig");
+// const { initPassport, initPassportGithub } = require("./config/passportConfig");
 const passport = require("passport");
+const {initPassport} = require("./passport-jwt/passportConfig");
 
 initPassport();
-initPassportGithub();
+// initPassportGithub();
 passport.use(passport.initialize());
-passport.use(passport, session);
+// passport.use(passport, session);
 
 app.use(cookieParser("palabra secreta"));
 

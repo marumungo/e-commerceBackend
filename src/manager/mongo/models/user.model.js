@@ -16,7 +16,10 @@ const userSchema = new Schema({
         index: true
     },
     password: String,
-    role: String,
+    role: {
+        type: String,
+        default: "user"
+    },
     gender: String
 });
 

@@ -5,48 +5,51 @@ const session = require('express-session');
 const { createHash, isValidPassword } = require("../utils/bcryptHash");
 const passport = require("passport");
 const { generateToken } = require("../utils/jwt");
+const { passportCall } = require("../passport-jwt/passportCall");
+const { authorization } = require("../passport-jwt/authorizationJwtRole");
 
 const router = Router();
 
+
 // SESSION
 // Endpoint para registrarse
-// router.post("/register", async (req, res) => {
-//     try {        
-//         const { username, first_name, last_name, email, password } = req.body;
+router.post("/register", async (req, res) => {
+    try {        
+        const { username, first_name, last_name, email, password } = req.body;
+
+        // Validar si ya existe el email
+        const existUser = await userModel.findOne({email});
+        if (existUser) {
+            return res.send({status: "error", message: "el email ya está registrado"});
+        }
+
+        const newUser = {
+            username,
+            first_name,
+            last_name,
+            email,
+            role: "user",
+            password: createHash(password)
+        }
+        let resultUser = await userModel.create(newUser);
+
+        let token = generateToken({
+            first_name: first_name,
+            last_name: last_name,
+            email: email
+        });
     
-//         // Validar si ya existe el email
-//         const existUser = await userModel.findOne({email});
-//         if (existUser) {
-//             return res.send({status: "error", message: "el email ya está registrado"});
-//         }
-    
-//         const newUser = {
-//             username,
-//             first_name,
-//             last_name,
-//             email,
-//             password: createHash(password)
-//         }
-//         let resultUser = await userModel.create(newUser);
-
-//         let token = generateToken({
-//             first_name: first_name,
-//             last_name: last_name,
-//             email: email
-//         })
-
-//         // res.redirect('/'); 
-//         res.status(200).send({
-//             status: "success",
-//             message: "Usuario creado correctamente",
-//             token
-//         });
-
-//     } catch (err) {
-//         console.log(err);
-//     }
-// });
-
+        // res.redirect('/'); 
+        res.status(200).send({
+            status: "success",
+            message: "Usuario creado correctamente",
+            token
+        });
+    } catch (err) {
+        console.log(err);
+    }
+});
+            
 // // Endpoint para iniciar sesion
 // router.post("/login", async(req, res) => { 
 //     try {
@@ -60,16 +63,16 @@ const router = Router();
 //         // Validar que el usuario exista en la base de datos o que sea el especifico para ser admin
 //         const userDB = await userModel.findOne({email});
 //         if (!userDB) {
-//                 if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
-//                     req.session.user = {
-//                         first_name: "Admin",
-//                         last_name: "Coder",
-//                         email: "adminCoder@coder.com",
-//                         role: "admin"
-//                     };
-//                 } else {
-//                     return res.send({status: "error", message: "No existe ese usuario"});
-//                 }
+//             if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
+//                 req.session.user = {
+//                 first_name: "Admin",
+//                 last_name: "Coder",
+//                 email: "adminCoder@coder.com",
+//                 role: "admin"
+//                 };
+//             } else {
+//                 return res.send({status: "error", message: "No existe ese usuario"});
+//             }
 //         } else {
 //             req.session.user = {
 //                 first_name: userDB.first_name,
@@ -77,9 +80,8 @@ const router = Router();
 //                 email: userDB.email,
 //                 role: "user"
 //             };
-
 //         };
-        
+
 //         if(!isValidPassword(password, userDB)) {
 //             return res.status(401).send({
 //                 status: "error",
@@ -94,12 +96,6 @@ const router = Router();
 //         });
 
 //         // res.redirect('/api/products'); 
-//         res.send({
-//             status: 'success',
-//             message: 'login success',
-//             access_token
-//             // session: req.session.user
-//         });    
 //     } catch (err) {
 //         console.log(err);
 //     };
@@ -107,38 +103,75 @@ const router = Router();
 
 
 
+router.post('/login', async (req, res)=> {
+    const {email, password} = req.body
+    
+    // Validar que el usuario exista en la base de datos o que sea el especifico para ser admin
+    const userDB = await userModel.findOne({email});
+
+    if(!isValidPassword(password, userDB)) {
+        return res.status(401).send({
+            status: "error",
+            message: "El usuario o contraseña son incorrectos",
+        });
+    };
+
+    const access_token = generateToken({
+        first_name: userDB.first_name,
+        last_name: userDB.last_name,
+        email: userDB.email,
+        role: userDB.role
+    });
+    
+    res
+    .cookie('coderCookieToken', access_token,{
+        maxAge: 60*60*100,
+        httpOnly: true
+    })
+    .send({
+        status: 'success',
+        message: 'login success'
+    });
+});
+
+// Validar el rol
+router.get('/current', passportCall("jwt"), authorization('admin'), (req, res) => {
+    res.send(req.user);
+});
+
+
 
 // PASSPORT
 // Endpoint para registrarse con passport
-router.post("/register", passport.authenticate("register", {failureRedirect: "/api/sessions/failRegister"}), async (req, res) => {
-    // res.send({status: "success", message: "El usuario se registró correctamente"});
-    res.redirect("/api/sessions/login");
-});
+// router.post("/register", passport.authenticate("register", {failureRedirect: "/api/sessions/failRegister"}), async (req, res) => {
+//     // res.send({status: "success", message: "El usuario se registró correctamente"});
+//     res.redirect("/api/sessions/login");
+// });
 
-// Ruta de escape
-router.get("/failRegister", async (req, res) => {
-    res.send({status: "error", error: "Falló la autenticación"});
-});
+// // Ruta de escape
+// router.get("/failRegister", async (req, res) => {
+//     res.send({status: "error", error: "Falló la autenticación"});
+// });
 
 // Endpoint para iniciar sesion con passport
-router.post("/login", passport.authenticate("login", {failureRedirect: "/api/sessions/failLogin"}), async (req, res) => {
-    if (!req.user) {
-        return res.status(401).send({status: "error", message: "Credencial inválida"});
-    }
-    req.session.user = {
-        first_name: req.user.first_name,
-        last_name: req.user.last_name,
-        email: req.user.email,
-        role: req.user.role
-    }
-    // res.send({status: "success", message: "Sesión iniciada"});
-    res.redirect("/api/products");
-});
+// router.post("/login", passport.authenticate("login", {failureRedirect: "/api/sessions/failLogin"}), async (req, res) => {
+//     if (!req.user) {
+//         return res.status(401).send({status: "error", message: "Credencial inválida"});
+//     }
+//     req.session.user = {
+//         first_name: req.user.first_name,
+//         last_name: req.user.last_name,
+//         email: req.user.email,
+//         role: req.user.role
+//     }
+//     // res.send({status: "success", message: "Sesión iniciada"});
+//     res.redirect("/api/products");
+// });
 
-// Ruta de escape
-router.get("/failLogin", async (req, res) => {
-    res.send({status: "error", error: "Falló la autenticación"});
-});
+// // Ruta de escape
+// router.get("/failLogin", async (req, res) => {
+//     res.send({status: "error", error: "Falló la autenticación"});
+// });
 
 // Endpoint para ingresar con Github con passport
 router.get("/github", passport.authenticate("github", {scope: ["user: email"]}));

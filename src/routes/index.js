@@ -11,6 +11,9 @@ const ordersRouter = require("../routes/orders");
 const pruebasRouter = require("../routes/pruebas");
 const sessionsRouter = require("../routes/sessions");
 
+const newUsersRouter = require("../routes/newUsers");
+const userRouter = new newUsersRouter();
+
 // Llamo a los Routers y coloco los endpoint de inicio
 router.use("/api/products", productsRouter);
 router.use("/api/carts", cartsRouter);
@@ -18,6 +21,9 @@ router.use("/api/users", usersRouter);
 router.use("/api/orders", ordersRouter);
 router.use("/api/pruebas", pruebasRouter);
 router.use("/api/sessions", sessionsRouter);
+
+router.use("/api/newusers", userRouter.getRouter());
 router.use("/", viewsRouter);
+
 
 module.exports = router;

@@ -4,6 +4,7 @@ const productManagerMongo = require("../manager/mongo/product.mongo");
 const { productModel } = require("../manager/mongo/models/product.model");
 const { auth } = require("../middlewares/authentication");
 const { authToken } = require('../utils/jwt');
+const passport = require('passport');
 
 const productManager = new productManagerMongo();
 
@@ -15,7 +16,7 @@ const productManager = new productManagerMongo();
 const router = Router();
 
 // GET en el que se verán todos los productos
-router.get("/", auth, async (req, res) => {
+router.get("/", passport.authenticate("jwt", {session: false}), async (req, res) => {
     // Declaro un limite de 10 y pagina 1 por defecto (en caso de que no se reciba por query). Permito que se reciba por query un filtro y un orden por precio
     try {
         const {page = 1, limit = 10, query, sort} = req.query
