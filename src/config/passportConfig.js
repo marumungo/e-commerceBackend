@@ -82,7 +82,7 @@ const initPassportGithub = () => {
                 let newUser = {
                     first_name: profile.username,
                     last_name: "",
-                    email: "profile._json.email",
+                    email: profile._json.email,
                     role: "user",
                     password: ""
                 }

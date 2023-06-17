@@ -3,15 +3,15 @@ const { Router } = require("express");
 const router = Router();
 
 // Declaro a los Routers
-const cartsRouter = require("../routes/carts");
-const productsRouter = require("../routes/products");
-const viewsRouter = require("../routes/views");
-const usersRouter = require("../routes/users");
-const ordersRouter = require("../routes/orders");
-const pruebasRouter = require("../routes/pruebas");
-const sessionsRouter = require("../routes/sessions");
+const cartsRouter = require("./carts.router");
+const productsRouter = require("./products.router");
+const viewsRouter = require("./views.router");
+const usersRouter = require("./users.router");
+const ordersRouter = require("./orders.router");
+const pruebasRouter = require("./pruebas.router");
+const sessionsRouter = require("./sessions.router");
 
-const newUsersRouter = require("../routes/newUsers");
+const newUsersRouter = require("./newUsers.router");
 const userRouter = new newUsersRouter();
 
 // Llamo a los Routers y coloco los endpoint de inicio

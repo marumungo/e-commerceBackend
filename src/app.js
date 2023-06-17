@@ -6,7 +6,9 @@ const logger = require("morgan");
 const app = express();
 
 // Declaro el puerto en el que se ejecutará el código, utilizando socket.io
-const PORT = 8080;
+const objectConfig = require("./config/objectConfig");
+
+const PORT = objectConfig.port
 
 const httpServer = app.listen(PORT, () => {
     console.log(`Escuchando en el puerto: ${PORT}`);
@@ -17,8 +19,6 @@ const { Server } = require("socket.io");
 const io = new Server(httpServer);
 
 // Ejecuto la configuracion de la base de datos
-const objectConfig = require("./config/objectConfig");
-
 objectConfig.connectDB();
 
 // Configuro handlebars
@@ -37,6 +37,10 @@ app.set("view engine", "handlebars");
 
 // Lectura de código compatible
 app.use(express.json());
+
+const cors = require("cors");
+app.use(cors());
+
 app.use(express.urlencoded({extended: true}));
 app.use("/static", express.static(__dirname + "/public"));
 app.use(logger("dev"));
@@ -61,7 +65,6 @@ const session = require("express-session");
 
 const { create } = require("connect-mongo");
 
-require('dotenv').config();
 let url = process.env.MONGO_URL;
 
 // app.use(session({
@@ -80,12 +83,12 @@ let url = process.env.MONGO_URL;
 // }));
 
 // Configuro passport
-// const { initPassport, initPassportGithub } = require("./config/passportConfig");
+const { initPassportGithub } = require("./config/passportConfig");
 const passport = require("passport");
 const {initPassport} = require("./passport-jwt/passportConfig");
 
 initPassport();
-// initPassportGithub();
+initPassportGithub();
 passport.use(passport.initialize());
 // passport.use(passport, session);
 
@@ -104,6 +107,6 @@ socketChat(io);
 socketProducts(io);
 
 // Llamo al archivo que contiene los Routers
-const routerServer = require("./routes/index");
+const routerServer = require("./routes/index.router");
 
 app.use(routerServer);
