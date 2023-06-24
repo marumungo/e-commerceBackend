@@ -1,4 +1,4 @@
-const { userModel } = require('../manager/mongo/models/user.model');
+const { userModel } = require('../dao/dataBase/models/user.model');
 const { createHash, isValidPassword } = require("../utils/bcryptHash");
 const { generateToken } = require("../utils/jwt");
 require("dotenv").config();
@@ -139,7 +139,7 @@ class SessionController {
                     role: "admin"
                 });
                 
-                res
+                return res
                 .cookie('coderCookieToken', access_token,{
                     maxAge: 60*60*100,
                     httpOnly: true

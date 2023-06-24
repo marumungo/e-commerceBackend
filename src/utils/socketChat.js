@@ -1,4 +1,4 @@
-const { messageModel } = require("../manager/mongo/models/messages.model");
+const { messageModel } = require("../dao/dataBase/models/messages.model");
 
 const socketChat = (io) => {
     // Declaro el array donde se almacenarán los mensajes

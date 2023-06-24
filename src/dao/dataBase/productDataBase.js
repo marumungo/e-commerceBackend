@@ -1,6 +1,6 @@
 const { productModel } = require("./models/product.model");
 
-class ProductManagerMongo {
+class ProductDaoDataBase {
     async getProducts() {
         try {
             return await productModel.find({});
@@ -22,20 +22,20 @@ class ProductManagerMongo {
             return new Error(error);
         }
     }
-    async updateProductById(uid, updatedProduct) {
+    async updateProductById(id, updatedProduct) {
         try {
-            return await productModel.updateOne({_id: uid}, updatedProduct);
+            return await productModel.updateOne({_id: id}, updatedProduct);
         } catch (error) {
             return new Error(error);
         }
     }
-    async deleteProductById(uid) {
+    async deleteProductById(id) {
         try {
-            return await productModel.deleteOne({_id: uid});
+            return await productModel.deleteOne({_id: id});
         } catch (error) {
             return new Error(error);
         }
     }
 }
 
-module.exports = ProductManagerMongo;
+module.exports = ProductDaoDataBase;

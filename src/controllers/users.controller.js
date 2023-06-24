@@ -1,4 +1,4 @@
-const { userModel } = require("../manager/mongo/models/user.model");
+const { userModel } = require("../dao/dataBase/models/user.model");
 
 class UserController {
     // GET que trae los usuarios a partir del userModel y el paginate

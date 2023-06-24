@@ -1,4 +1,4 @@
-const { productModel } = require("../manager/mongo/models/product.model");
+const { productModel } = require("../dao/dataBase/models/product.model");
 const { productService } = require("../service/index.service");
 
 class ProductController {

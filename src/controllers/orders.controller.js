@@ -1,4 +1,4 @@
-const { orderModel } = require("../manager/mongo/models/order.model");
+const { orderModel } = require("../dao/dataBase/models/order.model");
 
 class OrderController {
     // GET que muestra las ordenes de la coleccion

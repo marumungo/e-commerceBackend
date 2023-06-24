@@ -16,7 +16,7 @@ let products = [
     {"title": "Top", "description": "Escote corazón", "price": 1390, "category": "Partes de arriba","thumbail": ["imagen10.com"], "code": 25, "stock": 36, "id": 10}
 ];
 
-class ProductManagerFile {
+class ProductDaoFile {
     constructor() {
         this.path = path;
     };
@@ -73,15 +73,15 @@ class ProductManagerFile {
         return product;
     };
 
-    async updateProductById(id, update) {
+    async updateProductById(id, updatedProduct) {
         const parseId = parseInt(id);
 
         // Buscar el producto con esa id, y actualizar sus datos (menos el id)
         const productIndex = products.findIndex(p => p.id === parseId);
         if (productIndex >= 0) {
-            products[productIndex] = {id: parseId, ...update};
+            products[productIndex] = {id: parseId, ...updatedProduct};
             await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2), 'utf-8');
-            return update;
+            return updatedProduct;
         } else {
             return new Error ("No existe el producto a actualizar");
         };
@@ -102,8 +102,6 @@ class ProductManagerFile {
 };
 
 
-module.exports = {
-    ProductManagerFile
-};
+module.exports = ProductDaoFile;
 
 

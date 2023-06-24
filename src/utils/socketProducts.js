@@ -1,9 +1,9 @@
-const { ProductManagerFile } = require("../manager/file/productManagerFile");
+const ProductDaoFile = require("../dao/file/productFile");
 
-const productManager = new ProductManagerFile();
+const productDao = new ProductDaoFile();
 
 const socketProducts = async (io) => {
-    const products = await productManager.getProducts();
+    const products = await productDao.getProducts();
 
     io.on("connection", socket => {
         console.log("Nuevo cliente conectado");
@@ -12,7 +12,7 @@ const socketProducts = async (io) => {
 
         socket.on("addProduct", data => {
             console.log(data);
-            productManager.addProduct(data);
+            productDao.addProduct(data);
         })
     });
 };

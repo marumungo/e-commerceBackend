@@ -1,6 +1,6 @@
 const passport = require("passport");
 const local = require("passport-local");
-const { userModel } = require("../manager/mongo/models/user.model");
+const { userModel } = require("../dao/dataBase/models/user.model");
 const { createHash, isValidPassword } = require("../utils/bcryptHash");
 const { create } = require("connect-mongo");
 

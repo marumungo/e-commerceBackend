@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { Router } = require("express");
-const { orderModel } = require("../manager/mongo/models/order.model");
+const { orderModel } = require("../dao/dataBase/models/order.model");
 const { getOrders, getBySize, createOrders } = require('../controllers/orders.controller');
 
 // Declaro y llamo al Router

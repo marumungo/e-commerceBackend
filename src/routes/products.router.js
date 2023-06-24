@@ -2,10 +2,6 @@ const { Router } = require("express");
 const passport = require('passport');
 const { getProducts, getProductById, createProducts, updateProducts, deleteProducts } = require('../controllers/products.controller');
 
-// CODIGO PARA TRABAJAR CON FILESYSTEM
-// const { ProductManagerFile } = require("../manager/file/productManagerFile");
-// const productManager = new ProductManagerFile();
-
 // Declaro y llamo al Router
 const router = Router();
 

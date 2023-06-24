@@ -1,4 +1,4 @@
-const { cartModel } = require("../manager/mongo/models/cart.model");
+const { cartModel } = require("../dao/dataBase/models/cart.model");
 
 class CartController {
     // GET que devuelve todos los carritos

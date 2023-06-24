@@ -1,6 +1,11 @@
-const ProductDaoMongo = require("../manager/mongo/product.mongo");
+const ProductDaoDataBase = require("../dao/dataBase/productDataBase");
+const ProductDaoFile = require("../dao/file/productFile");
+const ProductDaoMemory = require("../dao/memory/productMemory");
 
-const productService = new ProductDaoMongo();
+const productService = new ProductDaoDataBase();
+// const productService = new ProductDaoFile();
+// const productService = new ProductDaoMemory();
+
 
 module.exports = {
     productService
