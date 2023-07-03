@@ -51,21 +51,40 @@ class RouterClass {
         next();
     };
 
-
-    get(path, policies, ...callback) {
-        this.router.get(path, this.handlePolicies(policies), this.generateCustomResponse, this.applyCallbacks(callback));
+    get(path, policies, requiredRole, ...callback) {
+        this.router.get(
+            path,
+            this.handlePolicies(policies),
+            this.generateCustomResponse,
+            this.applyCallbacks(callback),
+        );    
     };
 
-    post(path, policies, ...callback) {
-        this.router.get(path, this.handlePolicies(policies), this.generateCustomResponse, this.applyCallbacks(callback));
+    post(path, policies, requiredRole, ...callback) {
+        this.router.post(
+            path,
+            this.handlePolicies(policies),
+            this.generateCustomResponse,
+            this.applyCallbacks(callback)
+        );    
     };
 
-    put(path, policies, ...callback) {
-        this.router.get(path, this.handlePolicies(policies), this.generateCustomResponse, this.applyCallbacks(callback));
+    put(path, policies, requiredRole, ...callback) {
+        this.router.put(
+            path, 
+            this.handlePolicies(policies),
+            this.generateCustomResponse, 
+            this.applyCallbacks(callback)
+        );
     };
 
-    delete(path, policies, ...callback) {
-        this.router.get(path, this.handlePolicies(policies), this.generateCustomResponse, this.applyCallbacks(callback));
+    delete(path, policies, requiredRole, ...callback) {
+        this.router.delete(
+            path, 
+            this.handlePolicies(policies),
+            this.generateCustomResponse, 
+            this.applyCallbacks(callback)
+        );
     };
 };
 

@@ -4,6 +4,19 @@ const { productService } = require("../service/index.service");
 class ProductController {
     // GET en el que se verán todos los productos
     getProducts = async (req, res) => {
+        try {
+            let getProducts = await productService.getProducts();
+            res.status(200).send({
+                status: "success",
+                payload: getProducts
+            });
+        } catch (error) {
+            res.status(500).send({ error: error.message });
+        };
+    };
+
+    // GET en el que se verán todos los productos usando paginate
+    getProductsPaginate = async (req, res) => {
         // Declaro un limite de 10 y pagina 1 por defecto (en caso de que no se reciba por query). Permito que se reciba por query un filtro y un orden por precio
         try {
             const {page = 1, limit = 10, query, sort} = req.query
@@ -50,7 +63,11 @@ class ProductController {
             if (!getProductById) {
                 return res.status(400).send({error: "No existe un producto con esa ID"});
             } else {
-                return res.render("individualProduct", { product: getProductById});
+                // return res.render("individualProduct", { product: getProductById});
+                res.status(200).send({
+                    status: "success",
+                    payload: getProductById
+                });
             }
         } catch (error) {
             res.status(400).send({error: error.message});
@@ -58,7 +75,7 @@ class ProductController {
     }
     
     // POST que agrega nuevos productos al array
-    createProducts = async (req, res) => {
+    addProduct = async (req, res) => {
         try {
             const product = req.body;
     
@@ -79,7 +96,10 @@ class ProductController {
             const updateProduct = req.body;
     
             const updatedProduct = await productService.updateProductById(id, updateProduct);
-            res.status(200).send({updatedProduct});
+            res.status(200).send({
+                status: "success",
+                payload: updatedProduct
+            });
         } catch (error) {
             res.status(400).send({error: error.message});
         }; 
@@ -88,8 +108,13 @@ class ProductController {
     // DELETE que elimina un producto según su id
     deleteProducts = async (req, res) => {
         const { id } = req.params;
+        
         const deleteProductById = await productService.deleteProductById(id);
-        res.send({deleteProductById});
+        
+        res.status(200).send({
+            status: "success",
+            payload: deleteProductById
+        });    
     };
 };
 

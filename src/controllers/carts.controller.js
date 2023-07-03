@@ -1,10 +1,12 @@
+const { v4: uuidv4 } = require('uuid');
 const { cartModel } = require("../dao/dataBase/models/cart.model");
+const { cartService, productService, ticketService } = require("../service/index.service");
 
 class CartController {
     // GET que devuelve todos los carritos
     getCarts = async (req, res) => {
         try {
-            let carts = await cartModel.find({});
+            let carts = await cartService.getCarts();
             res.status(200).send({
                 status: "success",
                 payload: carts
@@ -19,64 +21,37 @@ class CartController {
         try {
             // Busco el carrito con esa id
             const { cid } = req.params;
-            // const parseId = parseInt(cid);
-            // const cartById = carts.find(cart => cart.id === parseId);
     
-            // Validación de si existe o no la id
-            // if (!cartById) {
-            //     return res.status(400).send({error: "No existe un carrito con esa ID"});
-            // }
-    
-            let result = await cartModel.findOne({_id: cid});
+            let result = await cartService.getCartById(cid);
             if (!result) {
                 return res.status(404).send({status: "error", message: "No se encuentra el carrito"});
             };
     
-            res.render('individualCart', { carts: result.products });
-            // res.send({cartById});
+            res.status(200).send({status: "success", payload: result});
         } catch (error) {
             console.log(error);
         };
     };
 
     // POST que crea un carrito
-    createCarts = async (req, res) => {
+    addCart = async (req, res) => {
         try {
             let cart = req.body;
-        
-            // Verificar que aunque sea haya un producto y que este almacenado en un array
-            // if (!cart.products) {
-            //     return res.status(400).send({status: "error", mensaje: "Debe agregar aunque sea un producto"});
-            // } else if (!Array.isArray(cart.products)) {
-            //     return res.status(400).send({status: "error", mensaje: "Los productos deben estar en un array"});
-            // }
-        
-            // Generar un id autoincrementable
-            // if (carts.length === 0) {
-            //     cart.id = 1;
-            // } else {
-            //     cart.id = carts[carts.length - 1].id + 1;
-            // }
         
             const newCart = {
                 products: [cart]
             }
             
-            let result = await cartModel.create(newCart);
+            let result = await cartService.addCart(newCart);
     
-            res.status(200).send({result});
-            
-            // Agregar el producto al array y al JSON (FILESYSTEM)
-            // carts.push(cart);
-            // res.status(200).send({cart});
-            // fs.writeFileSync(path, JSON.stringify(carts, null, 2), 'utf-8');
+            res.status(200).send(result);
         } catch (error) {
             console.log(error);
         };
     };
 
     // POST que agregue un producto por id, a un carrito segun su id
-    createCartsById = async (req, res) => {
+    addCartById = async (req, res) => {
         try {
             // Busco el carrito con esa id
             const { cid, pid } = req.params;
@@ -86,32 +61,8 @@ class CartController {
                 quantity
             }
     
-            // const parseId = parseInt(cid);
-            // const cartById = carts.find(cart => cart.id === parseId);
-        
-            // Validación de si existe o no un carrito con esa id
-            // if (!cartById) {
-            //     return res.status(400).send({error: "No existe un carrito con esa ID"});
-            // }
-        
-            // Validación de si el producto ya está en ese carrito, en caso de que si, aumentar su cantidad en 1, sino, crearlo
-            // const parseId2 = parseInt(pid);
-            // const productIndex = cartById.products.findIndex(product => product.product === parseId2);
-            
-            // if (productIndex < 0) {
-            //     cartById.products.push({ product: parseId2, quantity: 1});
-            //     res.status(200).send({status: "success", message: "Producto agregado al carrito!", payload: cartById});
-            // } else {
-            //     cartById.products[productIndex].quantity += 1;
-            //     res.status(200).send({status: "success", message: "Se ha sumado otro producto igual!", payload: cartById});
-            // }
-    
             // En caso de que el producto exista, incremento su cantidad
-            const cartToUpdate = await cartModel.findOneAndUpdate(
-                {_id: cid, "products.product": pid},
-                {$inc: {"products.$.quantity": 1}},
-                {new: true}
-            )
+            const cartToUpdate = await cartService.addCartById(cid, pid, quantity);
             
             if (cartToUpdate) {
                 res.send("Cantidad actualizada");
@@ -128,9 +79,8 @@ class CartController {
     
             res.send({
                 status: "success",
-                payload: result
+                payload: cartToUpdate
             });
-            // fs.writeFileSync(path, JSON.stringify(carts, null, 2), 'utf-8');
         } catch (error) {
             console.log(error);
         };
@@ -145,11 +95,7 @@ class CartController {
             // Mapear el array de objetos para crear un nuevo array de subdocumentos completos
             const updatedProducts = products.map(({ product, quantity }) => ({ product, quantity }));
     
-            let result = await cartModel.findOneAndUpdate(
-                { _id: cid },
-                { $set: { products: updatedProducts } },
-                { new: true }
-            );
+            let result = await cartService.updateCarts(cid, updatedProducts);
     
             res.send({
                 status: "success",
@@ -161,16 +107,12 @@ class CartController {
     };
 
     // PUT que actualiza la cantidad de un producto de un carrito segun su id
-    updateCartsById = async (req, res) => {
+    updateCartById = async (req, res) => {
         try {
             const { cid, pid } = req.params;
             const { quantity } = req.body;
     
-            const cartToUpdate = await cartModel.findOneAndUpdate(
-                {_id: cid, "products.product": pid},
-                {$set: {"products.$.quantity": quantity}},
-                {new: true}
-            )
+            const cartToUpdate = await cartService.updateCartById(cid, pid, quantity);
     
             res.send({
                 status: "success",
@@ -182,15 +124,11 @@ class CartController {
     };
 
     // DELETE que borra los productos de un carrito segun su id
-    deleteCarts = async (req, res) => {
+    deleteProductsCart = async (req, res) => {
         try {
             const { cid } = req.params;
     
-            let result = await cartModel.findOneAndUpdate(
-                {_id: cid},
-                {$set: {products: {}}},
-                {new: true}
-            )
+            let result = await cartService.deleteProductsCart(cid);
     
             res.send({
                 status: "success",
@@ -202,15 +140,11 @@ class CartController {
     };
 
     // DELETE que borra un producto de un carrito segun su id
-    deleteCartsById = async (req, res) => {
+    deleteCartById = async (req, res) => {
         try {
             const { cid, pid } = req.params;
     
-            let result = await cartModel.findOneAndUpdate(
-                {_id: cid},
-                {$pull: {products: {product: pid}}},
-                {new: true}
-            )
+            let result = await cartService.deleteCartById(cid, pid);
     
             res.send({
                 status: "success",
@@ -219,6 +153,71 @@ class CartController {
         } catch (error) {
             console.log(error);
         };
+    };
+
+
+    // POST que crea el ticket
+    addTicket = async (req, res) => {
+        try {
+            const { cid } = req.params;
+            const cart = await cartService.getCartById(cid);
+        
+            const productsWithoutStock = [];
+            const productsToUpdate = [];
+        
+            for (const item of cart.products) {
+                if (item.product) {
+                    const product = item.product;
+                    const quantity = item.quantity;
+                    const pid = item.product._id;
+                    let stock = item.product.stock;
+            
+                    if (quantity > stock) {
+                        productsWithoutStock.push(product);
+                    } else {
+                        const updatedStock = stock - quantity;
+                        productsToUpdate.push({ pid, stock: updatedStock });
+                    }
+                }
+            };
+        
+            if (productsWithoutStock.length > 0) {
+                res.send({
+                    status: "error",
+                    message: "Algunos de los productos no tienen suficiente stock",
+                    productsWithoutStock
+                });
+            } else {
+                for (const product of productsToUpdate) {
+                    await productService.updateProductById(product.pid, { stock: product.stock });
+                }
+        
+                const amount = cart.products.reduce((total, item) => {
+                    return total + (item.product && item.product.price ? item.product.price : 0) * item.quantity;
+                }, 0);
+    
+                const code = uuidv4();
+
+                const ticket = {
+                    code: code,
+                    amount: amount,
+                    purchaser: req.user && req.user.email ? req.user.email : "Usuario desconocido"
+                }
+
+                console.log(ticket)
+
+                await ticketService.addTicket(ticket);
+        
+                await cartService.deleteCartById(cid);
+        
+                res.send({
+                    status: "success",
+                    payload: ticket,
+                });
+            };
+        } catch (error) {
+            console.log(error);
+        }
     };
 };
 

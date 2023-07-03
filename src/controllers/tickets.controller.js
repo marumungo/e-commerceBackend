@@ -1,10 +1,10 @@
-const { orderModel } = require("../dao/dataBase/models/order.model");
+const { ticketModel } = require("../dao/dataBase/models/ticket.model");
 
-class OrderController {
-    // GET que muestra las ordenes de la coleccion
-    getOrders = async (req, res) => {
+class TicketController {
+    // GET que muestra los tickets de la coleccion
+    getTickets = async (req, res) => {
         try {
-            let result = await orderModel.find();
+            let result = await ticketModel.find();
     
             res.send({
                 status: "success",
@@ -15,11 +15,11 @@ class OrderController {
         };
     };
 
-    // GET que muestra las ordenes de la coleccion
+    // GET que muestra los tickets de la coleccion
     getBySize = async (req, res) => {
         const { size } = req.params;
         try {
-            let result = await orderModel.aggregate([
+            let result = await ticketModel.aggregate([
                 {
                     $match: {size: size}
                 },
@@ -30,10 +30,10 @@ class OrderController {
                     $sort: {totalQuantity: -1}
                 },
                 {
-                    $group: {_id: 1, orders: {$push: "$$ROOT"}}
+                    $group: {_id: 1, tickets: {$push: "$$ROOT"}}
                 },
                 {
-                    $project: {"_id": 0, orders: "$orders"}
+                    $project: {"_id": 0, tickets: "$tickets"}
                 },
                 {
                     $merge: {into: "reportes"}
@@ -49,14 +49,14 @@ class OrderController {
         };
     };
 
-    // POST que añade ordenes a la coleccion
-    createOrders = async (req, res) => {
+    // POST que añade tickets a la coleccion
+    addTicket = async (req, res) => {
         try {
-            let result = await orderModel.insertMany()
+            const ticket = await ticketModel.create(req.body);
     
             res.send({
                 status: "success",
-                payload: result
+                payload: ticket
             });
         } catch (error) {
             console.log(error);
@@ -64,4 +64,4 @@ class OrderController {
     }
 };
 
-module.exports = new OrderController();
+module.exports = new TicketController();

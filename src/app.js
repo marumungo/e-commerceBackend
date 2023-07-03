@@ -94,11 +94,6 @@ passport.use(passport.initialize());
 
 app.use(cookieParser("palabra secreta"));
 
-// Declaro el endpoint que utilizará socket.io y llamo a la funcion
-app.get('/chat', (req, res)=>{
-    res.render('chat', {})
-});
-
 // Llamo a las funciones de socket (en utils)
 const { socketChat } = require("./utils/socketChat");
 const { socketProducts } = require("./utils/socketProducts");

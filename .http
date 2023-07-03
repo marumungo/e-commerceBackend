@@ -1,3 +1,16 @@
+// TICKETS
+CREA UN TICKET
+### POST
+GET localhost:8080/api/64601897ced89f02b8035fdb/purchase
+{
+  "products": [
+    {
+      "product": "64601897ced89f02b8035fd9",
+      "quantity": 8
+    }
+  ]
+}
+
 // CARTS
 DEVUELVE TODOS LOS CARRITOS
 ### GET

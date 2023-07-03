@@ -7,9 +7,11 @@ const cartsRouter = require("./carts.router");
 const productsRouter = require("./products.router");
 const viewsRouter = require("./views.router");
 const usersRouter = require("./users.router");
-const ordersRouter = require("./orders.router");
+const ticketsRouter = require("./tickets.router");
 const pruebasRouter = require("./pruebas.router");
 const sessionsRouter = require("./sessions.router");
+const contactsRouter = require("./contacts.router");
+
 
 const newUsersRouter = require("./newUsers.router");
 const userRouter = new newUsersRouter();
@@ -18,9 +20,10 @@ const userRouter = new newUsersRouter();
 router.use("/api/products", productsRouter);
 router.use("/api/carts", cartsRouter);
 router.use("/api/users", usersRouter);
-router.use("/api/orders", ordersRouter);
+router.use("/api/tickets", ticketsRouter);
 router.use("/api/pruebas", pruebasRouter);
 router.use("/api/sessions", sessionsRouter);
+router.use("/api/contacts", contactsRouter);
 
 router.use("/api/newusers", userRouter.getRouter());
 router.use("/", viewsRouter);

@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-const path = "./src/manager/file/products.json";
+const path = "./src/dao/file/products.json";
 
 // Declaro los productos en forma de objetos, dentro de un array
 let products = [
@@ -46,7 +46,7 @@ class ProductDaoFile {
             return product ? product : null;
         } catch (error) {
             return null;
-        }
+        };
     };   
 
     async addProduct(product) {
