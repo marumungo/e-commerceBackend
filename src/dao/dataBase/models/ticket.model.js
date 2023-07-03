@@ -12,8 +12,7 @@ const ticketSchema = new Schema({
     },
     purchase_datetime: {
         type: Date,
-        required: true,
-        default: Date.now
+        required: true
     },
     amount: {
         type: Number,

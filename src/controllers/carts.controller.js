@@ -200,15 +200,14 @@ class CartController {
 
                 const ticket = {
                     code: code,
+                    purchase_datetime: Date(),
                     amount: amount,
                     purchaser: req.user && req.user.email ? req.user.email : "Usuario desconocido"
                 }
 
-                console.log(ticket)
-
                 await ticketService.addTicket(ticket);
         
-                await cartService.deleteCartById(cid);
+                await cartService.deleteProductsCart(cid);
         
                 res.send({
                     status: "success",
