@@ -35,6 +35,7 @@ app.engine("handlebars", hbs.engine);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "handlebars");
 
+
 // Lectura de código compatible
 app.use(express.json());
 
@@ -49,6 +50,7 @@ app.use(logger("dev"));
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 
+
 // const fileStore = FileStore(session);
 
 // app.use(session({
@@ -60,23 +62,23 @@ const session = require("express-session");
         
         //     secret: "palabraSecreta",
         //     resave: true,
-//     saveUninitialized: true
-// }));
+        //     saveUninitialized: true
+        // }));
 
 const { create } = require("connect-mongo");
 
 let url = process.env.MONGO_URL;
 
 // app.use(session({
-//     store: create ({
-//         mongoUrl: url,
-//         mongoOptions: {
+    //     store: create ({
+        //         mongoUrl: url,
+        //         mongoOptions: {
 //             useNewUrlParser: true,
 //             useUnifiedTopology: true
 //         },
 //         ttl: 10000 * 60
 //     }),
-    
+
 //     secret: "palabraSecreta",
 //     resave: true,
 //     saveUninitialized: true
@@ -101,7 +103,13 @@ const { socketProducts } = require("./utils/socketProducts");
 socketChat(io);
 socketProducts(io);
 
+
 // Llamo al archivo que contiene los Routers
 const routerServer = require("./routes/index.router");
 
 app.use(routerServer);
+
+// LLamo al manejador de errores
+const { errorHandler } = require("./middlewares/error.middleware");
+
+app.use(errorHandler);

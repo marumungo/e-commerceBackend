@@ -1,5 +1,5 @@
 const {Router} = require("express");
-const {auth} = require("../middlewares/authentication");
+const {auth} = require("../middlewares/authentication.middleware");
 const passport = require("passport");
 const { passportCall } = require("../passport-jwt/passportCall");
 const { authorization } = require("../passport-jwt/authorizationJwtRole");

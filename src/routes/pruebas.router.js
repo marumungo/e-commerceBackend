@@ -4,6 +4,9 @@ const { sendMail } = require("../utils/sendMail");
 const { sendWhatsapp, sendSms } = require("../utils/sendSms");
 const { passportCall } = require("../passport-jwt/passportCall");
 const { authorization } = require("../passport-jwt/authorizationJwtRole");
+const { generateUser } = require("../utils/generateUserFaker");
+const compression = require('express-compression');
+const { generateProducts } = require("../utils/generateProductFaker");
 
 const router = Router();
 
@@ -91,5 +94,49 @@ router.get('/mail', async (req, res) => {
     let result = await sendMail(destino, subject, html, attachments);
     res.send('Email enviado');
 });
+
+router.get('/mocks', (req, res)=> {
+    let users = [];
+    for (let i = 0; i < 100; i++) {
+        users.push(generateUser());       
+    };
+    res.send({
+        status: 'success',
+        payload: users
+    });
+});
+
+router.get('/mockingproducts', (req, res)=> {
+    let products = [];
+    for (let i = 0; i < 100; i++) {
+        products.push(generateProducts());       
+    };
+    res.send({
+        status: 'success',
+        payload: products
+    });
+});
+
+// GZIP
+// router.use(compression());
+
+// BROTLI
+router.use(compression({
+    brotli: {
+        enabled: true,
+        zlib: {}
+    }
+}));
+
+router.get('/stringmuylargo', (req, res)=> {
+    let string = `Hola Coders, soy una string ridículamente largo`;
+
+    for(let i=0; i<5e4; i++){
+        string += `Hola Coders, soy una string ridículamente largo`;
+    };
+
+    res.send(string);
+});
+
 
 module.exports = router;

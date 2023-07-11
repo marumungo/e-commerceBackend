@@ -1,20 +1,38 @@
 const { userModel } = require('../dao/dataBase/models/user.model');
 const { createHash, isValidPassword } = require("../utils/bcryptHash");
+const { CustomError } = require('../utils/customError/customError');
+const { Error } = require('../utils/CustomError/Errors')
+const { generateUserErrorInfo } = require('../utils/customError/info');
 const { generateToken } = require("../utils/jwt");
 require("dotenv").config();
 
 class SessionController {
     // Endpoint para registrarse
-    registerSession = async (req, res) => {
+    registerSession = async (req, res, next) => {
         try {        
             const { username, first_name, last_name, email, password } = req.body;
-    
+
+            if (!username || !first_name || !last_name || !email || !password) {
+                CustomError.createError({
+                    name: 'User creation error',
+                    cause: generateUserErrorInfo({
+                        username,
+                        first_name, 
+                        last_name,
+                        email,
+                        password
+                    }),
+                    message: 'Error trying to created user',
+                    code: Error.INVALID_TYPE_ERROR
+                });
+            };
+
             // Validar si ya existe el email
             const existUser = await userModel.findOne({email});
             if (existUser) {
                 return res.send({status: "error", message: "el email ya está registrado"});
-            }
-    
+            };
+
             const newUser = {
                 username,
                 first_name,
@@ -22,10 +40,11 @@ class SessionController {
                 email,
                 role: "user",
                 password: createHash(password)
-            }
+            };
             let resultUser = await userModel.create(newUser);
     
             let token = generateToken({
+                username: username,
                 first_name: first_name,
                 last_name: last_name,
                 email: email
@@ -37,8 +56,8 @@ class SessionController {
                 message: "Usuario creado correctamente",
                 token
             });
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            next(error);
         };
     };
 

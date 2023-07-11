@@ -1,5 +1,8 @@
 const { productModel } = require("../dao/dataBase/models/product.model");
 const { productService } = require("../service/index.service");
+const { Error } = require("../utils/CustomError/Errors");
+const { CustomError } = require("../utils/customError/customError");
+const { generateProductErrorInfo } = require("../utils/customError/info");
 
 class ProductController {
     // GET en el que se verán todos los productos
@@ -75,17 +78,44 @@ class ProductController {
     }
     
     // POST que agrega nuevos productos al array
-    addProduct = async (req, res) => {
+    addProduct = async (req, res, next) => {
         try {
-            const product = req.body;
-    
+            const {title, description, price, category, stock, code, imageUrl} = req.body;
+            
+            if (!title || !description || !price || !category || !stock || !code || !imageUrl) {
+                CustomError.createError({
+                    name: 'Product creation error',
+                    cause: generateProductErrorInfo({
+                        title,
+                        description,
+                        price,
+                        category,
+                        stock,
+                        code,
+                        imageUrl
+                    }),
+                    message: 'Error trying to create product',
+                    code: Error.INVALID_TYPE_ERROR
+                });
+            };
+            
+            const product = {
+                title,
+                description,
+                price,
+                category,
+                stock,
+                code,
+                imageUrl
+            };
+
             let addProduct = await productService.addProduct(product);
             res.status(200).send({
                 status: "success",
                 payload: addProduct
             });
         } catch (error) {
-            res.status(400).send({error: error.message});
+            next(error);
         }; 
     };
     
