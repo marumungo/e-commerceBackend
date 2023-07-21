@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const { winstonLogger } = require("../config/loggers");
 
 class RouterClass {
     constructor() {
@@ -20,7 +21,7 @@ class RouterClass {
             try {
                 await callback.apply(this, params);
             } catch(error) {
-                console.log(error);
+                winstonLogger.error(error);
                 // Llamo a params[1], que seria res ---> (req, res, ...)
                 params[1].status(500).send(error);
             }

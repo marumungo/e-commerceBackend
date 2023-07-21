@@ -1,3 +1,4 @@
+const { winstonLogger } = require('../config/loggers');
 const { userModel } = require('../dao/dataBase/models/user.model');
 const { createHash, isValidPassword } = require("../utils/bcryptHash");
 const { CustomError } = require('../utils/customError/customError');
@@ -108,7 +109,7 @@ class SessionController {
     
             // res.redirect('/api/products'); 
         } catch (err) {
-            console.log(err);
+            winstonLogger.error(err);
         };
     };
 

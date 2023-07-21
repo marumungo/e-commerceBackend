@@ -10,8 +10,9 @@ const objectConfig = require("./config/objectConfig");
 
 const PORT = objectConfig.port
 
+const { winstonLogger } = require("./config/loggers");
 const httpServer = app.listen(PORT, () => {
-    console.log(`Escuchando en el puerto: ${PORT}`);
+    winstonLogger.info(`Escuchando en el puerto: ${PORT}`);
 });
 
 const { Server } = require("socket.io");
@@ -49,6 +50,11 @@ app.use(logger("dev"));
 // Llamo a cookie-parser y a session
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+
+// Llamo al logger
+const { addLogger } = require("./middlewares/logger.middleware");
+
+app.use(addLogger);
 
 
 // const fileStore = FileStore(session);

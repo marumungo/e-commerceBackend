@@ -1,3 +1,4 @@
+const { winstonLogger } = require("../config/loggers");
 const { ticketModel } = require("../dao/dataBase/models/ticket.model");
 
 class TicketController {
@@ -11,7 +12,7 @@ class TicketController {
                 payload: result
             });
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         };
     };
 
@@ -45,7 +46,7 @@ class TicketController {
                 payload: result
             });
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         };
     };
 
@@ -59,7 +60,7 @@ class TicketController {
                 payload: ticket
             });
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         }
     }
 };

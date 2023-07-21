@@ -1,3 +1,5 @@
+const { winstonLogger } = require("../../config/loggers");
+
 const form = document.querySelector("#cookieForm");
 
 form.addEventListener("submit", (e) => {
@@ -16,9 +18,9 @@ form.addEventListener("submit", (e) => {
         body: JSON.stringify(obj)
     })
     .then (respuesta => respuesta.json())
-    .then (respuesta => console.log(respuesta))
+    .then (respuesta => winstonLogger.info(respuesta))
 });
 
 const getCookie = () => {
-    console.log(document.cookie)
+    winstonLogger.info(document.cookie)
 };

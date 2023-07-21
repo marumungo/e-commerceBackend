@@ -1,3 +1,4 @@
+const { winstonLogger } = require("../config/loggers");
 const { userModel } = require("../dao/dataBase/models/user.model");
 const { userService } = require("../service/index.service");
 
@@ -30,7 +31,7 @@ class UserController {
                 nextPage
             })
         } catch (error) {
-            console.log(error)
+            winstonLogger.error(error)
         };
     };
     
@@ -55,7 +56,7 @@ class UserController {
                 payload: addUser
             });
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         };
     };
     
@@ -81,7 +82,7 @@ class UserController {
                 payload: updatedUser
             });
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         };
     };
     
@@ -97,7 +98,7 @@ class UserController {
                 payload: deleteUserById
             }); 
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         };
     };
 };

@@ -1,3 +1,4 @@
+const { winstonLogger } = require("../config/loggers");
 const { messageModel } = require("../dao/dataBase/models/messages.model");
 
 const socketChat = (io) => {
@@ -5,8 +6,8 @@ const socketChat = (io) => {
     let messages = [];
 
     io.on('connection', socket => {
-        console.log('Nuevo cliente conectado');
-        console.log(socket.id);
+        winstonLogger.info('Nuevo cliente conectado');
+        winstonLogger.info(socket.id);
     
         // Almacenar, emitir los logs y subirlos a la base de datos
         socket.on("message", async data => {
@@ -20,7 +21,7 @@ const socketChat = (io) => {
         
             try {
                 const result = await messageModel.create(newMessage);
-                console.log(result);
+                winstonLogger.info(result);
             } catch (error) {
                 console.error(error);
             }

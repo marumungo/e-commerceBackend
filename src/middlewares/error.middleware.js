@@ -1,5 +1,7 @@
+const { winstonLogger } = require("../config/loggers");
+
 const errorHandler = (error, req, res, next) => {
-    console.log(error.cause);
+    winstonLogger.info(error.cause);
     switch (error.code) {
         case Error.ROUTING_ERROR:
             return res.send({status: "error", error: error.name});

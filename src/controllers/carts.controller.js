@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const { cartModel } = require("../dao/dataBase/models/cart.model");
 const { cartService, productService, ticketService } = require("../service/index.service");
+const { winstonLogger } = require('../config/loggers');
 
 class CartController {
     // GET que devuelve todos los carritos
@@ -29,7 +30,7 @@ class CartController {
     
             res.status(200).send({status: "success", payload: result});
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         };
     };
 
@@ -46,7 +47,7 @@ class CartController {
     
             res.status(200).send(result);
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         };
     };
 
@@ -82,7 +83,7 @@ class CartController {
                 payload: cartToUpdate
             });
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         };
     };
 
@@ -102,7 +103,7 @@ class CartController {
                 payload: result
             });
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         };
     };
 
@@ -119,7 +120,7 @@ class CartController {
                 payload: cartToUpdate
             });
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         };
     };
 
@@ -135,7 +136,7 @@ class CartController {
                 payload: result
             });
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         };
     };
 
@@ -151,7 +152,7 @@ class CartController {
                 payload: result
             });
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         };
     };
 
@@ -215,7 +216,7 @@ class CartController {
                 });
             };
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         }
     };
 };

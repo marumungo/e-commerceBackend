@@ -1,9 +1,10 @@
-const {connect} = require('mongoose')
+const {connect} = require('mongoose');
+const { winstonLogger } = require('../config/loggers');
 
 class MongoSingleton {
     static #instance;
     constructor(){
-        // console.log(process.env.MONGO_URL);
+        // winstonLogger.info(process.env.MONGO_URL);
         connect(process.env.MONGO_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true
@@ -12,12 +13,12 @@ class MongoSingleton {
 
     static getInstance(){
         if (this.#instance) {
-            console.log("Base de datos ya está creada");
+            winstonLogger.info("Base de datos ya está creada");
             return this.#instance;
         };
 
         this.#instance = new MongoSingleton()
-        console.log("Base de datos creada");
+        winstonLogger.info("Base de datos creada");
         return this.#instance;
     };
 };

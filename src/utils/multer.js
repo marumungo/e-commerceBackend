@@ -1,12 +1,13 @@
 const multer = require('multer');
 const { dirname } = require("path");
+const { winstonLogger } = require('../config/loggers');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb){
         cb(null, `${dirname(__dirname)}/public/uploads`)
     },
     filename: function(req, file, cb){
-        console.log('file: ', file)
+        winstonLogger.info('file: ', file)
         cb(null, `${Date.now()}-${file.originalname}`)
     } 
 });
@@ -14,7 +15,7 @@ const storage = multer.diskStorage({
 const uploader = multer({
     storage,
     onError: function(err, next){
-        console.log(err)
+        winstonLogger.error(err)
         next()
     }
 });

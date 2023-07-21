@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { winstonLogger } from "../../../../src/config/loggers";
 
 const ItemDetailContainer = () => {
     const [product, setProduct] = useState({});
@@ -11,7 +12,7 @@ const ItemDetailContainer = () => {
         .then(resp => setProduct(resp.payload));
 
     }, []);
-    console.log(product);
+    winstonLogger.info(product);
 
     return (
         <div className="w-25">

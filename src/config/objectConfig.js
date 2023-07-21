@@ -2,6 +2,7 @@ const {connect} = require('mongoose')
 const dotenv = require('dotenv')
 const { commander } = require('../utils/commander');
 const { MongoSingleton } = require('../utils/singleton');
+const { winstonLogger } = require('./loggers');
 
 const { mode } = commander.opts()
 dotenv.config({
@@ -33,7 +34,7 @@ module.exports = {
     my_phone_number: myPhoneNumber,
     // connectDB: () => {
     //     connect(url);
-    //     console.log("Base de datos conectada");
+    //      winstonLogger.info("Base de datos conectada");
     // }
     connectDB: async () => await MongoSingleton.getInstance()
 };

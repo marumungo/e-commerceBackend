@@ -1,17 +1,19 @@
+const { winstonLogger } = require("../src/config/loggers");
+
 function listNumber(...numbers) {
     const types = numbers.map(nro => typeof nro);
-    console.log(types);
+    winstonLogger.info(types);
 
     if(types.includes("string") || types.includes("boolean")) {
         console.error(`Parámetro invalido: ${types}`);
         process.exitCode = -4;
     } else {
-        console.log(numbers);
+        winstonLogger.info(numbers);
     };
 
     process.on("exit", code => {
         if(code === -4) {
-            console.log("Proceso finalizado por argumento inválido");
+            winstonLogger.info("Proceso finalizado por argumento inválido");
         };
     });
 };

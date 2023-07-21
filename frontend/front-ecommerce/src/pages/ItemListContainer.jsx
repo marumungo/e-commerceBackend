@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import ItemList from "../components/ItemList/ItemList"
+import { winstonLogger } from "../../../../src/config/loggers";
 
 const ItemListContainer = () => {
     const [ products, setProducts ] = useState([]);
@@ -8,9 +9,9 @@ const ItemListContainer = () => {
         fetch('http://localhost:8080/api/products')
         .then(resp => resp.json())
         .then(resp => setProducts(resp.payload))
-        .catch(error => console.log(error))
+        .catch(error =>  winstonLogger.error(error))
     }, []);
-    console.log(products);
+    winstonLogger.info(products);
     
     return (
         <>

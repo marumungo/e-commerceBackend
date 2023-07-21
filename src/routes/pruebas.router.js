@@ -7,6 +7,8 @@ const { authorization } = require("../passport-jwt/authorizationJwtRole");
 const { generateUser } = require("../utils/generateUserFaker");
 const compression = require('express-compression');
 const { generateProducts } = require("../utils/generateProductFaker");
+const { faker } = require("@faker-js/faker");
+const { winstonLogger } = require("../config/loggers");
 
 const router = Router();
 
@@ -80,7 +82,7 @@ router.get('/sms', async (req, res) => {
 
 
 router.get('/mail', async (req, res) => {
-    console.log(__dirname);
+    winstonLogger.info(__dirname);
     let destino = 'marumungo@gmail.com';
     let subject = 'Correo de prueba';
     let html = `<div>
@@ -138,5 +140,44 @@ router.get('/stringmuylargo', (req, res)=> {
     res.send(string);
 });
 
+router.get('/loggerTest', (req,res)=> {
+    // req.logger.debug('debug');
+    // req.logger.http('http');
+    // req.logger.info('info');
+    req.logger.warning('warning');
+    req.logger.error('error');
+    req.logger.fatal('fatal error');
+    res.send({message: 'Prueba de logger'});
+});
+
+router.get('/simple',(req,res) => {
+    let suma = 0;
+    for (let i = 0; i < 1000000; i++) {
+        suma += i
+    };
+    res.send({suma});
+});
+
+router.get('/compleja',(req,res) => {
+    let suma = 0;
+    for (let i = 0; i < 5e8; i++) {
+        suma += i
+    };
+    res.send({suma});
+});
+
+router.get('/testuser', (req, res)=>{
+    let persona = {
+        first_name: faker.person.firstName(),
+        last_name:  faker.person.lastName(),
+        email:      faker.internet.email(),
+        password:   faker.internet.password()
+    };
+
+    res.send({
+        status: 'success', 
+        payload: persona
+    });
+});
 
 module.exports = router;

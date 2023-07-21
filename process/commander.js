@@ -1,4 +1,5 @@
 const commander = require('commander')
+const { winstonLogger } = require('../src/config/loggers')
 
 const program = new commander.Command()
 
@@ -11,20 +12,20 @@ program
     
 program.parse()
 
-console.log('options: ', program.opts())
-console.log('Remaining Arguments: ', program.args)
+winstonLogger.info('options: ', program.opts())
+winstonLogger.info('Remaining Arguments: ', program.args)
 
 
 // node commander.js -d -p 3000 --mode develpment -u root --letters a b c
 // node commander.js -d -p 3000 -u root 2 a 5 --letters fede
 
 process.on('exit', code => {
-    console.log('se ejecuta justo antes de terminar el processo', code)
+    winstonLogger.info('se ejecuta justo antes de terminar el processo', code)
 })
 process.on('uncaughtException', exception => {
-    console.log('se ejecuta justo con alguna exception')
+    winstonLogger.info('se ejecuta justo con alguna exception')
 })
 process.on('message', message => {
-    console.log('muestra el mensaje de otro processo')
+    winstonLogger.info('muestra el mensaje de otro processo')
 })
 

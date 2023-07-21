@@ -6,6 +6,7 @@ const { create } = require("connect-mongo");
 
 const LocalStrategy = local.Strategy;
 const GithubStrategy = require("passport-github2");
+const { winstonLogger } = require("./loggers");
 
 // Configuro passport de register y login
 const initPassport = () => {
@@ -74,7 +75,7 @@ const initPassportGithub = () => {
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
         callbackURL: process.env.GITHUB_CALLBACK_URL,
     }, async (accesToken, refreshToken, profile, done) => {
-        console.log(profile);
+        winstonLogger.info(profile);
         try {
             let user = await userModel.findOne({email: profile._json.email});
 
@@ -91,7 +92,7 @@ const initPassportGithub = () => {
             }
             return done(null, user);
         } catch (error) {
-            console.log(error);
+            winstonLogger.error(error);
         }
     }))
 
