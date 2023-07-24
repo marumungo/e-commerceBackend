@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app.js",
-    "start:dev": "nodemon src/app.js"
+    "start": "node src/app.js --mode development",
+    "start:dev": "nodemon src/app.js --mode development",
+    "start:prod": "nodemon src/app.js --mode production"
   },
   "repository": {
     "type": "git",

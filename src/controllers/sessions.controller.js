@@ -1,10 +1,13 @@
 const { winstonLogger } = require('../config/loggers');
 const { userModel } = require('../dao/dataBase/models/user.model');
 const { createHash, isValidPassword } = require("../utils/bcryptHash");
-const { CustomError } = require('../utils/customError/customError');
+const { CustomError } = require('../utils/CustomError/CustomError');
 const { Error } = require('../utils/CustomError/Errors')
-const { generateUserErrorInfo } = require('../utils/customError/info');
+const { generateUserErrorInfo } = require('../utils/CustomError/info');
 const { generateToken } = require("../utils/jwt");
+const { sendMail } = require('../utils/sendMail');
+
+const jwt = require('jsonwebtoken');
 require("dotenv").config();
 
 class SessionController {
@@ -222,21 +225,52 @@ class SessionController {
     };
 
     forgotPassword = async (req, res) => {
-        const { email, password } = req.body;
+        const { email } = req.body;
 
         // Encontrar el usuario por correo electrónico
         const userDB = await userModel.findOne({ email });
 
         if (!userDB) {
             return res.status(401).send({status: 'error', message: 'El usuario no existe'})
-        }    
+        };    
 
-        // Actualizar la contraseña del usuario
-        userDB.password = createHash(password)
-        await userDB.save()
+        // Enviar el email de recuperacion al usuario
+        sendMail(email);
 
         // res.status(200).json({status: 'success', message:'Contraseña actualizada correctamente'});
         res.redirect("/api/sessions/login");
+    };
+
+    resetPassword = async (req, res) => {
+        const { token } = req.query;
+        const { password } = req.body;
+
+        try {
+            // Vericar el JWT token
+            const decodedToken = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
+            console.log(decodedToken);
+            const { email } = decodedToken;
+
+            // Encontrar si el usuario está creado
+            const userDB = await userModel.findOne({ email });
+
+            if (!userDB) {
+            return res.status(401).send({ status: 'error', message: 'El usuario no existe' });
+            }
+
+            // Verifico que la contraseña llegue
+            if (!password) {
+                return res.status(400).send({ status: 'error', message: 'Password is required' });
+            }
+
+            // Actualizar la contraseña
+            userDB.password = createHash(password);
+            await userDB.save();
+
+            res.render("resetPassword", { token });
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     sessionCounter = async (req, res) => {

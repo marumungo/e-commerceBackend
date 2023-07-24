@@ -1,8 +1,8 @@
 const { productModel } = require("../dao/dataBase/models/product.model");
 const { productService } = require("../service/index.service");
 const { Error } = require("../utils/CustomError/Errors");
-const { CustomError } = require("../utils/customError/customError");
-const { generateProductErrorInfo } = require("../utils/customError/info");
+const { CustomError } = require("../utils/CustomError/CustomError");
+const { generateProductErrorInfo } = require("../utils/CustomError/info");
 
 class ProductController {
     // GET en el que se verán todos los productos

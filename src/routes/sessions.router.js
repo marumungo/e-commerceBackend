@@ -3,7 +3,8 @@ const {auth} = require("../middlewares/authentication.middleware");
 const passport = require("passport");
 const { passportCall } = require("../passport-jwt/passportCall");
 const { authorization } = require("../passport-jwt/authorizationJwtRole");
-const { registerSession, loginSession, loginCookie, registerPassport, loginPassport, registerPassportEscape, loginPassportEscape, githubCallback, privateAdmin, logoutSession, forgotPassword, sessionCounter, roleValidator } = require("../controllers/sessions.controller");
+const { registerSession, loginSession, loginCookie, registerPassport, loginPassport, registerPassportEscape, loginPassportEscape, githubCallback, privateAdmin, logoutSession, forgotPassword, resetPassword, sessionCounter, roleValidator } = require("../controllers/sessions.controller");
+const { authToken } = require("../utils/jwt");
 
 const router = Router();
 
@@ -46,9 +47,11 @@ router.get("/privada", auth, privateAdmin);
 // Endpoint para eliminar la sesion
 router.get("/logout", logoutSession);
 
-// Endpoint para restaurar la contraseña
+// Endpoint para recuperar la contraseña
 router.post('/forgotPassword', forgotPassword);
 
+// Endpoint para restaurar la contraseña
+router.post('/resetPassword', resetPassword);
 
 // Endpoint para contar la cantidad de veces que se ingresó al sito
 router.get("/counter", sessionCounter);
