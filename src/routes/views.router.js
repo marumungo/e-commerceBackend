@@ -44,6 +44,10 @@ router.get("/api/sessions/forgotPassword", (req, res) => {
     res.render("forgotPassword", {});
 });
 
+router.get("/api/sessions/resetPassword", (req, res) => {
+    res.render("resetPassword", { token: req.query.token });
+});
+
 // Declaro el endpoint de páginas no existentes
 router.get("*", async (req, res) => {
     res.status(404).send("404 not found");

@@ -109,6 +109,8 @@ class SessionController {
                 last_name: userDB.last_name,
                 email: userDB.email
             });
+
+            res.send({status: "success", message: "El usuario inició correctamente"});
     
             // res.redirect('/api/products'); 
         } catch (err) {
@@ -190,6 +192,13 @@ class SessionController {
             email: userDB.email,
             role: userDB.role
         });
+
+        req.session.user = {
+            first_name: userDB.first_name,
+            last_name: userDB.last_name,
+            email: userDB.email,
+            role: userDB.role
+        };
         
         res
         .cookie('coderCookieToken', access_token,{
@@ -237,8 +246,8 @@ class SessionController {
         // Enviar el email de recuperacion al usuario
         sendMail(email);
 
-        // res.status(200).json({status: 'success', message:'Contraseña actualizada correctamente'});
-        res.redirect("/api/sessions/login");
+        res.status(200).json({status: 'success', message:'Email de recuperación enviado correctamente'});
+        // res.redirect("/api/sessions/login");
     };
 
     resetPassword = async (req, res) => {
@@ -248,29 +257,39 @@ class SessionController {
         try {
             // Vericar el JWT token
             const decodedToken = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
-            console.log(decodedToken);
+            winstonLogger.info(decodedToken);
             const { email } = decodedToken;
 
             // Encontrar si el usuario está creado
             const userDB = await userModel.findOne({ email });
 
             if (!userDB) {
-            return res.status(401).send({ status: 'error', message: 'El usuario no existe' });
-            }
+                return res.status(401).send({ status: "error", message: "El usuario no esta registrado" });
+            };
 
-            // Verifico que la contraseña llegue
+            // Verifico que la contraseña sea colocada
             if (!password) {
-                return res.status(400).send({ status: 'error', message: 'Password is required' });
-            }
+                return res.status(400).send({ status: "error", message: "La contraseña es obligatoria!" });
+            };
+
+            // Verifico que la contraseña no sea la misma que la actual
+            if (isValidPassword(password, userDB)) {
+                return res.status(400).send({ status: "error", message: "La contraseña debe ser diferente a la actual!" });
+            };
 
             // Actualizar la contraseña
             userDB.password = createHash(password);
             await userDB.save();
 
-            res.render("resetPassword", { token });
+            res.status(200).json({ status: 'success', message: 'Contraseña actualizada correctamente' });
         } catch (err) {
-            console.log(err);
-        }
+            // En caso de que el token ya no exista, redirecciono a la pagina de recuperación
+            if (err instanceof jwt.TokenExpiredError) {
+                return res.redirect("/api/sessions/forgotPassword");
+            } else {
+                winstonLogger.error(err);
+            };
+        };
     };
 
     sessionCounter = async (req, res) => {

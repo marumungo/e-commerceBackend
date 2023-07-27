@@ -12,9 +12,7 @@ const router = Router();
 // Endpoint para registrarse
 router.post("/register", registerSession);
             
-// // Endpoint para iniciar sesion
-// router.post("/login", loginSession);
-
+// Endpoint para iniciar sesion
 router.post('/login', loginCookie);
 
 // Validar el rol

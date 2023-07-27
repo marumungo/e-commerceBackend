@@ -14,13 +14,13 @@ router.get("/", getProducts);
 router.get("/:id", getProductById);
 
 // POST que agrega nuevos productos al array
-// router.post("/", passportCall("jwt"), authorization("admin"), addProduct);
-router.post("/", addProduct);
+router.post("/", passportCall("jwt"), authorization("admin", "premium"), addProduct);
+// router.post("/", addProduct);
 
 // PUT que actualiza un producto según su id
 router.put("/:id", passportCall("jwt"), authorization("admin"), updateProducts);
 
 // DELETE que elimina un producto según su id
-router.delete("/:id", passportCall("jwt"), authorization("admin"), deleteProducts);
+router.delete("/:id", passportCall("jwt"), authorization("admin", "premium"), deleteProducts);
 
 module.exports = router;

@@ -8,6 +8,15 @@ class UserDaoDataBase {
             return new Error(error);
         }
     }
+
+    async getUserById(id) {
+        try {
+            return await userModel.findOne({_id: id});
+        } catch (error) {
+            return new Error(error);
+        }
+    }
+
     async addUser(user) {
         try {
             return await userModel.create(user);
@@ -15,9 +24,18 @@ class UserDaoDataBase {
             return new Error(error);
         }
     }
+
     async updateUserById(id, updatedUser) {
         try {
             return await userModel.updateOne({_id: id}, updatedUser);
+        } catch (error) {
+            return new Error(error);
+        }
+    }
+
+    async updateRoleUser(id) {
+        try {
+            return await userModel.findOne({_id: id});
         } catch (error) {
             return new Error(error);
         }

@@ -31,14 +31,15 @@ const generateResetPasswordLink = (email) => {
 exports.sendMail = async (destino) => {
     const resetPasswordLink = generateResetPasswordLink(destino);
     const html = `
-        <h1>Hola! Olvidaste tu contraseña</h1>
+        <h1>Hola! Olvidaste tu contraseña?</h1>
         <p>Accedé al siguiente link para recuperarla:</p>
-        <a href="${resetPasswordLink}">${resetPasswordLink}</a>`;
+        <a href="${resetPasswordLink}">Restablecer aqui!</a>
+        <p>Por seguridad, este link es válido por una hora</p>`;
 
     return await transport.sendMail({
         from: 'Ecommerce <ecommerce.pruebas.backend@gmail.com>',
         to: destino,
-        subject: "Reset Password!",
+        subject: "Restablecer contraseña!",
         html
     });
 };

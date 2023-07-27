@@ -3,6 +3,7 @@ const { productService } = require("../service/index.service");
 const { Error } = require("../utils/CustomError/Errors");
 const { CustomError } = require("../utils/CustomError/CustomError");
 const { generateProductErrorInfo } = require("../utils/CustomError/info");
+const { winstonLogger } = require("../config/loggers");
 
 class ProductController {
     // GET en el que se verán todos los productos
@@ -13,6 +14,7 @@ class ProductController {
                 status: "success",
                 payload: getProducts
             });
+
         } catch (error) {
             res.status(500).send({ error: error.message });
         };
@@ -61,7 +63,7 @@ class ProductController {
         try {
             const { id } = req.params;
             const getProductById = await productService.getProductById(id);
-        
+            
             // Validación de si existe o no la id
             if (!getProductById) {
                 return res.status(400).send({error: "No existe un producto con esa ID"});
@@ -98,6 +100,13 @@ class ProductController {
                     code: Error.INVALID_TYPE_ERROR
                 });
             };
+
+            let owner
+            if (req.session.user.email) {
+                owner = req.session.user.email
+            } else {
+                owner = "admin"
+            }
             
             const product = {
                 title,
@@ -106,7 +115,8 @@ class ProductController {
                 category,
                 stock,
                 code,
-                imageUrl
+                imageUrl,
+                owner: owner
             };
 
             let addProduct = await productService.addProduct(product);
@@ -115,7 +125,7 @@ class ProductController {
                 payload: addProduct
             });
         } catch (error) {
-            next(error);
+            winstonLogger.error(error);
         }; 
     };
     
@@ -138,6 +148,12 @@ class ProductController {
     // DELETE que elimina un producto según su id
     deleteProducts = async (req, res) => {
         const { id } = req.params;
+
+        const getProductById = await productService.getProductById(id);
+
+        if (getProductById.owner !== req.session.user.email && req.session.user.role !== "admin") {
+            return res.status(400).send({error: "Debes ser admin o creador del producto para poder eliminarlo"});
+        };
         
         const deleteProductById = await productService.deleteProductById(id);
         

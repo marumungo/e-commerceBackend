@@ -71,20 +71,20 @@ const { create } = require("connect-mongo");
 
 let url = process.env.MONGO_URL;
 
-// app.use(session({
-//     store: create ({
-//         mongoUrl: url,
-//         mongoOptions: {
-//             useNewUrlParser: true,
-//             useUnifiedTopology: true
-//         },
-//         ttl: 10000 * 60
-//     }),
+app.use(session({
+    store: create ({
+        mongoUrl: url,
+        mongoOptions: {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        },
+        ttl: 10000 * 60
+    }),
 
-//     secret: "palabraSecreta",
-//     resave: true,
-//     saveUninitialized: true
-// }));
+    secret: "palabraSecreta",
+    resave: true,
+    saveUninitialized: true
+}));
 
 // Configuro passport
 const { initPassportGithub } = require("./config/passportConfig");

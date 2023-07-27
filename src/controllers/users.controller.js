@@ -34,6 +34,26 @@ class UserController {
             winstonLogger.error(error)
         };
     };
+
+    // GET que devuelve un usuario a partir de su id
+    getUserById = async (req, res) => {
+        try {
+            const { id } = req.params;
+            const getUserById = await userService.getUserById(id);
+            
+            // Validación de si existe o no la id
+            if (!getUserById) {
+                return res.status(400).send({error: "No existe un usuario con esa ID"});
+            } else {
+                res.status(200).send({
+                    status: "success",
+                    payload: getUserById
+                });
+            }
+        } catch (error) {
+            res.status(400).send({error: error.message});
+        }; 
+    }
     
     // POST que agrega un usuario a la base de datos a partir del userModel
     createUsers = async (req, res) => {
@@ -61,7 +81,7 @@ class UserController {
     };
     
     // PUT que actualiza un usuario en la base de datos a partir del userModel
-    updateUsers = async (req, res) => {
+    updateUserById = async (req, res) => {
         try {
             const { id } = req.params;
             const user = req.body;
@@ -80,6 +100,35 @@ class UserController {
             res.send({
                 status: "success",
                 payload: updatedUser
+            });
+        } catch (error) {
+            winstonLogger.error(error);
+        };
+    };
+
+    // PUT que actualiza el rol de un usuario
+    updateRoleUser = async (req, res) => {
+        try {
+            const { id } = req.params;
+            const getUserById = await userService.getUserById(id);
+
+            // Validación de si existe o no la id
+            if (!getUserById) {
+                return res.status(400).send({ error: "No existe un usuario con esa ID" });
+            }
+
+            let newRole;
+            if (getUserById.role === "user") {
+                newRole = "premium";
+            } else if (getUserById.role === "premium") {
+                newRole = "user";
+            }
+
+            const updatedUser = await userService.updateUserById(id, { role: newRole });
+
+            res.send({
+                status: "success",
+                payload: getUserById
             });
         } catch (error) {
             winstonLogger.error(error);
