@@ -52,6 +52,26 @@ const { addLogger } = require("./middlewares/logger.middleware");
 
 app.use(addLogger);
 
+// Llamo y configuro swagger
+const swaggerJsDoc = require('swagger-jsdoc')
+const swaggerUiExpress = require('swagger-ui-express')
+
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: 'Documentación de e-commerce',
+            description: 'Esta es la documentación del e-commerce'
+        }
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+}
+
+const specs = swaggerJsDoc(swaggerOptions)
+
+app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
+
+
 
 // const fileStore = FileStore(session);
 
