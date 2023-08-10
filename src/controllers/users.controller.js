@@ -35,6 +35,26 @@ class UserController {
         };
     };
 
+    // GET que devuelve un usuario a partir de su email
+    getUserByEmail = async (req, res) => {
+        try {
+            const { email } = req.params;
+            const getUserByEmail = await userService.getUserByEmail(email);
+            
+            // Validación de si existe o no el email
+            if (!getUserByEmail) {
+                return res.status(400).send({error: "No existe un usuario con ese email"});
+            } else {
+                res.status(200).send({
+                    status: "success",
+                    payload: getUserByEmail
+                });
+            }
+        } catch (error) {
+            res.status(400).send({error: error.message});
+        }; 
+    };
+
     // GET que devuelve un usuario a partir de su id
     getUserById = async (req, res) => {
         try {
@@ -53,7 +73,7 @@ class UserController {
         } catch (error) {
             res.status(400).send({error: error.message});
         }; 
-    }
+    };
     
     // POST que agrega un usuario a la base de datos a partir del userModel
     createUsers = async (req, res) => {

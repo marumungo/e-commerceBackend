@@ -19,8 +19,10 @@ router.post("/", passportCall("jwt"), authorization("admin", "premium"), addProd
 
 // PUT que actualiza un producto según su id
 router.put("/:id", passportCall("jwt"), authorization("admin"), updateProducts);
+// router.put("/:id", updateProducts);
 
 // DELETE que elimina un producto según su id
 router.delete("/:id", passportCall("jwt"), authorization("admin", "premium"), deleteProducts);
+// router.delete("/:id", deleteProducts);
 
 module.exports = router;

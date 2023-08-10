@@ -9,6 +9,14 @@ class UserDaoDataBase {
         }
     }
 
+    async getUserByEmail(email) {
+        try {
+            return await userModel.findOne({email: email});
+        } catch (error) {
+            return new Error(error);
+        }
+    }
+
     async getUserById(id) {
         try {
             return await userModel.findOne({_id: id});

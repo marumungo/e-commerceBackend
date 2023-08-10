@@ -63,9 +63,9 @@ class CartController {
             }
 
             const productOwner = await productService.getProductById(pid);
-            if (req.session.user.role === "premium" && productOwner.owner === req.session.user.email) {
-                return res.status(400).send({error: "No podes agregar un producto que creaste!"});
-            }
+            // if (req.session.user.role === "premium" && productOwner.owner === req.session.user.email) {
+            //     return res.status(400).send({error: "No podes agregar un producto que creaste!"});
+            // }
 
             // En caso de que el producto exista, incremento su cantidad
             const cartToUpdate = await cartService.addCartById(cid, pid, quantity);

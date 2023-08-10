@@ -7,7 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/app.js --mode development",
     "start:dev": "nodemon src/app.js --mode development",
-    "start:prod": "nodemon src/app.js --mode production"
+    "start:prod": "nodemon src/app.js --mode production",
+    "start:testMocha": "mocha test/Users.test.js",
+    "start:testChai": "mocha test/Chai.test.js",
+    "start:testBcryptDto": "mocha test/BcryptDto.test.js",
+    "start:testSupertest": "mocha test/Supertest.test.js"
+
   },
   "repository": {
     "type": "git",
@@ -52,5 +57,10 @@
     "uuid": "^9.0.0",
     "uuidv4": "^6.2.13",
     "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
   }
 }

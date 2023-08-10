@@ -303,7 +303,15 @@ class SessionController {
     };
 
     roleValidator = async (req, res) => {
-        res.send(req.user);
+        const cookie = req.cookies["coderCookieToken"];
+        
+        require('dotenv').config();
+        let privateKey = process.env.JWT_PRIVATE_KEY;
+        const user = jwt.verify(cookie, privateKey);
+        
+        if(user) {
+            return res.send({status: "success", payload: user});
+        };
     };
 };
 
