@@ -8,6 +8,11 @@ class UserRepository {
         return result;
     };
 
+    getUserByUsername = async (username) => {
+        let result = await this.dao.getUserByUsername(username);
+        return result;
+    };
+
     getUserByEmail = async (email) => {
         let result = await this.dao.getUserByEmail(email);
         return result;

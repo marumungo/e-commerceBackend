@@ -55,6 +55,26 @@ class UserController {
         }; 
     };
 
+    // GET que devuelve un usuario a partir de su username
+    getUserByUsername = async (req, res) => {
+        try {
+            const { username } = req.params;
+            const getUserByUsername = await userService.getUserByUsername(username);
+            
+            // Validación de si existe o no el username
+            if (!getUserByUsername) {
+                return res.status(400).send({error: "No existe un usuario con ese username"});
+            } else {
+                res.status(200).send({
+                    status: "success",
+                    payload: getUserByUsername
+                });
+            }
+        } catch (error) {
+            res.status(400).send({error: error.message});
+        }; 
+    };
+
     // GET que devuelve un usuario a partir de su id
     getUserById = async (req, res) => {
         try {

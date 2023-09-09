@@ -27,6 +27,7 @@
   "homepage": "https://github.com/marumungo/e-commerceBackend#readme",
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
+    "@nestjs/mapped-types": "*",
     "artillery-plugin-metrics-by-endpoint": "^1.2.0",
     "bcrypt": "^5.1.0",
     "commander": "^10.0.1",
